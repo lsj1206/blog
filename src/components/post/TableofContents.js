@@ -1,5 +1,5 @@
 // Floating Table Of Contents Component
-import React, { useState } from "react";
+import React, { useId, useState } from "react";
 import { styled } from "../../styles/Theme";
 // Assets
 import { TableIcon } from "../../assets/assets";
@@ -8,23 +8,31 @@ import IconButton from "../buttons/IconButton";
 
 const TableOfContents = ({ className, toc }) => {
   const [open, setOpen] = useState(false);
+  const tocId = useId();
 
   const toggleOpen = () => {
     setOpen((prev) => !prev);
   };
 
   return (
-    <TocWrapper className={className} $open={open}>
+    <TocWrapper className={className} $open={open} aria-label="Table of contents">
       <Header $open={open}>
-        <IconButton size={[32, 32]} icon={TableIcon} onClick={toggleOpen} />
-        <Title $open={open}>{"목차"}</Title>
+        <IconButton
+          size={[32, 32]}
+          icon={TableIcon}
+          onClick={toggleOpen}
+          ariaLabel={open ? "Collapse table of contents" : "Expand table of contents"}
+          aria-expanded={open}
+          aria-controls={tocId}
+        />
+        <Title $open={open}>Contents</Title>
       </Header>
-      <TocContainer dangerouslySetInnerHTML={{ __html: toc }} $open={open} />
+      <TocContainer id={tocId} dangerouslySetInnerHTML={{ __html: toc }} $open={open} />
     </TocWrapper>
   );
 };
 
-const TocWrapper = styled.div`
+const TocWrapper = styled.nav`
   z-index: 500;
   padding: 0 1rem 1rem 1rem;
   position: fixed;
@@ -39,8 +47,7 @@ const TocWrapper = styled.div`
   overflow-x: hidden;
   overflow-y: auto;
 
-  // 0px ~ 1440px
-  @media (max-width: 1440px) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.desktop}) {
     top: 50px;
     right: 5px;
     width: ${(props) => (props.$open ? `275px` : `auto`)};
@@ -74,17 +81,9 @@ const Header = styled.div`
     width: 1.25rem;
     height: 1.25rem;
     fill: ${({ theme }) => theme.btnText};
-
-    :hover {
-      fill: ${({ theme }) => theme.highlightText};
-    }
-    :active {
-      transform: scale(0.975);
-    }
   }
 
-  // 0px ~ 1440px
-  @media (max-width: 1440px) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.desktop}) {
     svg {
       margin: 0;
       fill: ${({ theme }) => theme.highlightText};
@@ -97,8 +96,7 @@ const Title = styled.h3`
   color: ${({ theme }) => theme.btnText};
   text-shadow: 1px 3px 5px rgba(0, 0, 0, 0.25);
 
-  // 0px ~ 1440px
-  @media (max-width: 1440px) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.desktop}) {
     display: ${(props) => (props.$open ? `flex` : `none`)};
   }
 `;
@@ -115,7 +113,8 @@ const TocContainer = styled.div`
     line-height: 1.4;
     text-decoration: none;
 
-    &:hover {
+    &:hover,
+    &:focus-visible {
       color: ${({ theme }) => theme.btnActive};
       font-weight: bolder;
     }
@@ -124,8 +123,7 @@ const TocContainer = styled.div`
     }
   }
 
-  // 0px ~ 1440px
-  @media (max-width: 1440px) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.desktop}) {
     display: ${(props) => (props.$open ? `flex` : `none`)};
   }
 `;

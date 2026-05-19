@@ -2,11 +2,11 @@
 import React from "react";
 import { graphql, navigate } from "gatsby";
 import { styled } from "../styles/Theme";
-import userData from "../../user-data";
 // Hooks
 import usePostList from "../hooks/usePostList";
 // Components
 import PostList from "../components/post/PostList";
+import SEO from "../components/seo/SEO";
 
 const IndexPage = ({ data }) => {
   if (!data) {
@@ -21,21 +21,20 @@ const IndexPage = ({ data }) => {
   );
 };
 
-const PageWrapper = styled.div`
+const PageWrapper = styled.section`
   display: flex;
   justify-content: center;
   padding-top: 30px;
   width: 768px;
 
-  // 0 ~ 768px
-  @media (max-width: 768px) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     width: 90%;
   }
 `;
 
 export const query = graphql`
   query MainPageQuery {
-    allMarkdownRemark(sort: { fields: frontmatter___createDate, order: DESC }) {
+    allMarkdownRemark(sort: { frontmatter: { createDate: DESC } }) {
       edges {
         node {
           frontmatter {
@@ -58,15 +57,6 @@ export const query = graphql`
   }
 `;
 
-export const Head = () => {
-  return (
-    <>
-      <title>{userData.title}</title>
-      <link rel="canonical" href={userData.url} />
-      <meta name="description" content={userData.blog_description} />
-      <meta name="robots" content="index, follow" />
-    </>
-  );
-};
+export const Head = () => <SEO pathname="/" />;
 
 export default IndexPage;

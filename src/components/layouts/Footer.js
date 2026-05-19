@@ -1,6 +1,5 @@
 // Main Layout Footer
 import React from "react";
-import { navigate } from "gatsby";
 import { styled } from "../../styles/Theme";
 import userData from "../../../user-data";
 // Assets
@@ -11,7 +10,7 @@ import IconButton from "../buttons/IconButton";
 const Footer = ({ className }) => {
   return (
     <FooterContainer className={className}>
-      <AboutButton size={[30, 30]} icon={AboutIcon} onClick={() => navigate(`/about`)} />
+      <AboutButton size={[30, 30]} icon={AboutIcon} to="/about" ariaLabel="About this blog" />
       <FooterText>{`© 2024. ${userData.name} all rights reserved.`}</FooterText>
     </FooterContainer>
   );
@@ -31,10 +30,12 @@ const AboutButton = styled(IconButton)`
   padding: 3px;
 `;
 
-const FooterText = styled.h6`
+const FooterText = styled.p`
   margin-bottom: 5px;
   padding-left: 5px;
   color: ${({ theme }) => theme.bgText};
+  font-size: 0.75rem;
+  font-weight: bolder;
 `;
 
 export default Footer;

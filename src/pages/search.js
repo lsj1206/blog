@@ -1,10 +1,9 @@
 // Searching Page
 import React, { useState, useEffect } from "react";
-import { graphql, navigate } from "gatsby";
+import { graphql, Link, navigate } from "gatsby";
 import { useLocation } from "@reach/router"; // 쿼리스트링 읽기 위해 추가
 import queryString from "query-string"; // 쿼리스트링 파싱을 위해 추가 설치
 import { styled } from "../styles/Theme";
-import userData from "../../user-data";
 // Assets
 import { SearchIcon, CancelIcon, TagsIcon } from "../assets/assets";
 // Hooks
@@ -12,6 +11,8 @@ import usePostList from "../hooks/usePostList";
 // Components
 import IconButton from "../components/buttons/IconButton";
 import PostList from "../components/post/PostList";
+import VisuallyHidden from "../components/common/VisuallyHidden";
+import SEO from "../components/seo/SEO";
 
 const SearchingPage = ({ data }) => {
   const [query, setQuery] = useState("");
@@ -37,28 +38,40 @@ const SearchingPage = ({ data }) => {
     );
   });
 
-  const onTag = (tag) => {
-    setQuery(tag);
-    navigate(`/search?tag=${encodeURIComponent(tag)}`);
+  const clearSearch = () => {
+    setQuery("");
+    navigate(`/search`);
   };
 
   useEffect(() => {
     const params = queryString.parse(location.search);
-    if (params.tag) {
-      setQuery(params.tag);
-    }
+    setQuery(typeof params.tag === "string" ? params.tag : "");
   }, [location.search]);
 
   return (
     <PageWrapper>
       <SearchContainer>
-        <SearchBar type="text" placeholder="Search..." value={query} onChange={(e) => setQuery(e.target.value)} />
-        <SearchButton size={[31, 31]} icon={query ? CancelIcon : SearchIcon} onClick={() => setQuery("")} />
+        <VisuallyHidden as="label" htmlFor="post-search-input">
+          Search posts
+        </VisuallyHidden>
+        <SearchBar
+          id="post-search-input"
+          type="text"
+          placeholder="Search..."
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+        />
+        <SearchButton
+          size={[31, 31]}
+          icon={query ? CancelIcon : SearchIcon}
+          onClick={clearSearch}
+          ariaLabel={query ? "Clear search" : "Search posts"}
+        />
       </SearchContainer>
       <TagContainer>
-        <TagsIcon />
+        <TagsIcon aria-hidden="true" focusable="false" />
         {sortedTags?.map(([tag, count]) => (
-          <TagItem key={tag} onClick={() => onTag(tag)}>
+          <TagItem key={tag} to={`/search?tag=${encodeURIComponent(tag)}`}>
             {tag}
             <TagCount>({count})</TagCount>
           </TagItem>
@@ -96,15 +109,14 @@ export const query = graphql`
   }
 `;
 
-const PageWrapper = styled.div`
+const PageWrapper = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
   padding-top: 30px;
   width: 768px;
 
-  // 0 ~ 768px
-  @media (max-width: 768px) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     width: 90%;
   }
 `;
@@ -117,8 +129,7 @@ const SearchContainer = styled.div`
   position: relative;
   width: 480px;
 
-  // 0 ~ 768px
-  @media (max-width: 768px) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     max-width: 80%;
   }
 `;
@@ -168,13 +179,12 @@ const TagContainer = styled.div`
     fill: ${({ theme }) => theme.bgText};
   }
 
-  // 0 ~ 1279px
-  @media (max-width: 1279px) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
     width: 95%;
   }
 `;
 
-const TagItem = styled.p`
+const TagItem = styled(Link)`
   display: flex;
   align-items: center;
   margin: 0.5rem 0.5rem 0 0;
@@ -184,11 +194,17 @@ const TagItem = styled.p`
   color: ${({ theme }) => theme.btnActive};
   font-size: 0.9rem;
   font-weight: bolder;
+  text-decoration: none;
   border-radius: 0.25rem;
   box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
   cursor: pointer;
 
-  &:hover {
+  &:visited {
+    color: ${({ theme }) => theme.btnActive};
+  }
+
+  &:hover,
+  &:focus-visible {
     color: ${({ theme }) => theme.highlightText};
     transform: scale(1.025);
     span {
@@ -210,6 +226,8 @@ const PostListContainer = styled.div`
   width: 100%;
 `;
 
-export const Head = () => <title>{userData.title}</title>;
+export const Head = () => (
+  <SEO title="Search" description="Search posts by title, category, or tag." pathname="/search/" robots="noindex, follow" />
+);
 
 export default SearchingPage;

@@ -150,6 +150,11 @@ const GlobalStyle = createGlobalStyle`
     color: black;
   }
 
+  :focus-visible {
+    outline: 2px solid ${({ theme }) => theme.highlightText};
+    outline-offset: 2px;
+  }
+
 `;
 
 export default GlobalStyle;

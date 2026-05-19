@@ -44,7 +44,7 @@ const Background = styled.div`
   scrollbar-width: none;
 `;
 
-const Content = styled.div`
+const Content = styled.main`
   flex: 1;
   display: flex;
   justify-content: center;

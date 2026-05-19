@@ -1,16 +1,17 @@
 // Main Sidebar
 import React from "react";
-import { graphql, useStaticQuery, navigate } from "gatsby";
+import { graphql, Link, useStaticQuery } from "gatsby";
 import { styled } from "../../styles/Theme";
 // Assets
 import { CategoryListIcon } from "../../assets/assets";
 
+const categoryPath = (category) => `/category/${encodeURIComponent(category)}`;
+
 const Sidebar = ({ className, open, setOpen }) => {
-  // useStaticQuery를 사용하여 데이터를 가져옵니다.
   const data = useStaticQuery(graphql`
     query {
       categoryList: allMarkdownRemark {
-        group(field: frontmatter___category) {
+        group(field: { frontmatter: { category: SELECT } }) {
           name: fieldValue
           count: totalCount
         }
@@ -20,29 +21,42 @@ const Sidebar = ({ className, open, setOpen }) => {
   `);
   const categoryList = data?.categoryList.group.sort((a, b) => b.count - a.count);
 
+  const closeOnBlur = (event) => {
+    if (!event.currentTarget.contains(event.relatedTarget)) {
+      setOpen(false);
+    }
+  };
+
   return (
     <SidebarContainer
       className={className}
       $open={open}
-      onMouseOver={() => setOpen(true)}
-      onMouseOut={() => setOpen(false)}
+      aria-label="Post categories"
+      onFocus={() => setOpen(true)}
+      onBlur={closeOnBlur}
+      onMouseEnter={() => setOpen(true)}
+      onMouseLeave={() => setOpen(false)}
     >
-      <ContentContainer $open={open}>
+      <ContentContainer $open={open} aria-label="Category navigation">
         <Title>
-          <CategoryListIcon />
+          <CategoryListIcon aria-hidden="true" focusable="false" />
           {"Category List"}
         </Title>
         <BorderLine />
         <CategoryList>
-          <ListItem key={"ALL Posts"} onClick={() => navigate(`/`)}>
-            <Text>{"ALL Posts"}</Text>
-            <Count>{data?.categoryList.AllCount}</Count>
-          </ListItem>
+          <CategoryListItem key="ALL Posts">
+            <CategoryLink to="/">
+              <Text>{"ALL Posts"}</Text>
+              <Count>{data?.categoryList.AllCount}</Count>
+            </CategoryLink>
+          </CategoryListItem>
           {categoryList?.map((category) => (
-            <ListItem key={category?.name} onClick={() => navigate(`/category/${category?.name}`)}>
-              <Text>{category?.name}</Text>
-              <Count>{category?.count}</Count>
-            </ListItem>
+            <CategoryListItem key={category?.name}>
+              <CategoryLink to={categoryPath(category?.name)}>
+                <Text>{category?.name}</Text>
+                <Count>{category?.count}</Count>
+              </CategoryLink>
+            </CategoryListItem>
           ))}
         </CategoryList>
       </ContentContainer>
@@ -50,7 +64,7 @@ const Sidebar = ({ className, open, setOpen }) => {
   );
 };
 
-const SidebarContainer = styled.div`
+const SidebarContainer = styled.aside`
   z-index: ${(props) => (props.$open ? `600` : `400`)};
   position: fixed;
   top: 100px;
@@ -63,13 +77,12 @@ const SidebarContainer = styled.div`
   overflow: hidden;
   transition: width 0.3s ease;
 
-  // 0px ~ 768px
-  @media (max-width: 768px) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     display: ${(props) => (props.$open ? `flex` : `none`)};
   }
 `;
 
-const ContentContainer = styled.div`
+const ContentContainer = styled.nav`
   padding: 1.5rem;
   width: 100%;
   height: 100%;
@@ -104,17 +117,26 @@ const CategoryList = styled.ul`
   margin: 0;
 `;
 
-const ListItem = styled.li`
+const CategoryListItem = styled.li`
+  margin: 0.15rem 0;
+`;
+
+const CategoryLink = styled(Link)`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: 0.15rem 0;
   color: ${({ theme }) => theme.btnText};
   font-size: 1.25rem;
+  text-decoration: none;
   text-shadow: 0px 1px 1px rgba(0, 0, 0, 0.1);
   cursor: pointer;
 
-  &:hover {
+  &:visited {
+    color: ${({ theme }) => theme.btnText};
+  }
+
+  &:hover,
+  &:focus-visible {
     color: ${({ theme }) => theme.highlightText};
     font-weight: bolder;
     border-bottom: 1px solid ${({ theme }) => theme.highlightText};
@@ -124,12 +146,13 @@ const ListItem = styled.li`
       color: ${({ theme }) => theme.warningText};
     }
   }
+
   &:active {
     transform: scale(0.975);
   }
 `;
 
-const Text = styled.p`
+const Text = styled.span`
   flex: 1;
   margin: 0 0.15rem;
   overflow: hidden;

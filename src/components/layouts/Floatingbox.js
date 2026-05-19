@@ -16,15 +16,15 @@ const FloatingBox = ({ className, toggleSideOpen }) => {
   };
 
   return (
-    <FloatingContainer className={className}>
-      <FloatingButton size={[36, 36]} icon={PageUpIcon} onClick={topScroll} />
-      <FloatingButton size={[36, 36]} icon={PageDownIcon} onClick={buttomScroll} />
-      <FloatingMenuButton size={[36, 36]} icon={HambergerIcon} onClick={toggleSideOpen} />
+    <FloatingContainer className={className} aria-label="Page controls">
+      <FloatingButton size={[36, 36]} icon={PageUpIcon} onClick={topScroll} ariaLabel="Scroll to top" />
+      <FloatingButton size={[36, 36]} icon={PageDownIcon} onClick={buttomScroll} ariaLabel="Scroll to bottom" />
+      <FloatingMenuButton size={[36, 36]} icon={HambergerIcon} onClick={toggleSideOpen} ariaLabel="Toggle category menu" />
     </FloatingContainer>
   );
 };
 
-const FloatingContainer = styled.div`
+const FloatingContainer = styled.nav`
   z-index: 700;
   display: flex;
   flex-direction: column;
@@ -47,8 +47,7 @@ const FloatingMenuButton = styled(IconButton)`
   background-color: ${({ theme }) => theme.bgLayout};
   border-radius: 50%;
 
-  // 0px ~ 768px
-  @media (max-width: 768px) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     display: flex;
   }
 `;

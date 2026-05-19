@@ -2,6 +2,7 @@
 import React from "react";
 import { Link } from "gatsby";
 import { styled } from "../styles/Theme";
+import SEO from "../components/seo/SEO";
 
 const NotFoundPage = () => {
   return (
@@ -9,7 +10,7 @@ const NotFoundPage = () => {
       <PageHeader>404 Page not found</PageHeader>
       <BorderLine />
       <ErrorText>
-        Sorry, we couldn’t find what you were looking for.
+        Sorry, we couldn't find what you were looking for.
         <br />
         <LinkText to="/">Go home</LinkText>.
       </ErrorText>
@@ -17,14 +18,13 @@ const NotFoundPage = () => {
   );
 };
 
-const PageWrapper = styled.div`
+const PageWrapper = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 
-  // 0 ~ 768px
-  @media (max-width: 768px) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     width: 66%;
   }
 `;
@@ -50,6 +50,8 @@ const LinkText = styled(Link)`
   text-shadow: 1px 3px 5px rgba(0, 0, 0, 0.25);
 `;
 
-export const Head = () => <title>Not found</title>;
+export const Head = () => (
+  <SEO title="Not found" description="The requested page could not be found." pathname="/404/" robots="noindex, nofollow" />
+);
 
 export default NotFoundPage;

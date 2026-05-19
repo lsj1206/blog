@@ -1,6 +1,6 @@
 // Post List Item Component
 import React from "react";
-import { navigate } from "gatsby";
+import { Link } from "gatsby";
 import { GatsbyImage, getImage } from "gatsby-plugin-image";
 import { styled } from "../../styles/Theme";
 // Assets
@@ -8,18 +8,18 @@ import { CategoryIcon, DateIcon, TagsIcon } from "../../assets/assets";
 
 const PostListItem = ({ className, post }) => {
   return (
-    <Wrapper className={className} onClick={() => navigate(`/post/${post?.slug}`)}>
-      <Img image={getImage(post?.coverImage)} alt="_thumbnail" />
+    <Wrapper className={className} to={`/post/${post?.slug}`}>
+      <Img image={getImage(post?.coverImage)} alt={post?.title || "Post thumbnail"} />
       <TextContainer>
         <TitleText>{post?.title}</TitleText>
         <Text>
-          <CategoryIcon />
+          <CategoryIcon aria-hidden="true" focusable="false" />
           {post?.category}
-          <DateIcon />
+          <DateIcon aria-hidden="true" focusable="false" />
           {post?.createDate}
         </Text>
         <TagContainer>
-          <TagsIcon />
+          <TagsIcon aria-hidden="true" focusable="false" />
           {post?.tag.map((tag) => (
             <TagItem key={tag}>{tag}</TagItem>
           ))}
@@ -29,20 +29,28 @@ const PostListItem = ({ className, post }) => {
   );
 };
 
-const Wrapper = styled.div`
+const Wrapper = styled(Link)`
   display: flex;
   flex-direction: row;
   align-items: center;
   margin: 0 0 2rem;
   width: 100%;
+  color: inherit;
+  text-decoration: none;
   cursor: pointer;
 
-  :hover h4 {
+  &:visited {
+    color: inherit;
+  }
+
+  &:hover h4,
+  &:focus-visible h4 {
     color: ${({ theme }) => theme.highlightText};
     transition: color 0.3s ease-in-out;
   }
 
-  :hover img {
+  &:hover img,
+  &:focus-visible img {
     transform: scale(1.125);
     transition: transform 0.3s ease-in-out;
   }
@@ -51,8 +59,7 @@ const Wrapper = styled.div`
     transform: scale(0.975);
   }
 
-  // 0 ~ 480px
-  @media (max-width: 480px) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.narrow}) {
     flex-direction: column;
   }
 `;
@@ -66,8 +73,7 @@ const Img = styled(GatsbyImage)`
   overflow: hidden;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5);
 
-  // 0 ~ 480px
-  @media (max-width: 480px) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.narrow}) {
     margin-left: 10%;
     width: 90%;
     height: 9rem;
@@ -90,8 +96,7 @@ const TextContainer = styled.div`
   width: 100%;
   overflow: hidden;
 
-  // 0 ~ 480px
-  @media (max-width: 480px) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.narrow}) {
     width: 90%;
   }
 `;
@@ -145,7 +150,7 @@ const TagContainer = styled.div`
   }
 `;
 
-const TagItem = styled.p`
+const TagItem = styled.span`
   display: flex;
   align-items: center;
   margin: 0 0.5rem 0.5rem 0;

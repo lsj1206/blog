@@ -8,6 +8,7 @@ import { giscusData } from "../../user-data";
 // Components
 import PostHeader from "../components/post/PostHeader";
 import TableOfContents from "../components/post/TableofContents";
+import SEO, { siteMetadata, toAbsoluteUrl } from "../components/seo/SEO";
 
 const PostTemplate = ({ data }) => {
   if (!data) {
@@ -17,7 +18,6 @@ const PostTemplate = ({ data }) => {
   const post = data?.markdownRemark;
   const postData = data?.markdownRemark.frontmatter;
 
-  // Giscus 테마를 동적으로 설정
   const { theme } = useContext(ThemeContext);
   const giscusTheme = theme === "light" ? "noborder_light" : "noborder_gray";
 
@@ -60,13 +60,11 @@ const PostContainer = styled.div`
   padding-top: 30px;
   width: 768px;
 
-  // 0 ~ 1279px
-  @media (max-width: 1279px) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
     width: 66vw;
   }
 
-  // 0px ~ 768px
-  @media (max-width: 768px) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     width: 75vw;
   }
 `;
@@ -119,27 +117,33 @@ export const Head = ({ data }) => {
   const frontmatter = post?.frontmatter || {};
   const title = frontmatter.title || "Empty title..";
   const description = post?.excerpt || title;
-  const url = `https://lsj1206.github.io/post/${post?.fields?.slug}/`;
+  const pathname = `/post/${post?.fields?.slug}/`;
   const image = frontmatter.coverImage?.childImageSharp?.gatsbyImageData?.images?.fallback?.src;
+  const imageUrl = toAbsoluteUrl(image) || toAbsoluteUrl(siteMetadata.defaultImage);
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: title,
+    description,
+    image: imageUrl ? [imageUrl] : undefined,
+    datePublished: frontmatter.createDate,
+    dateModified: frontmatter.lastDate || frontmatter.createDate,
+    author: {
+      "@type": "Person",
+      name: siteMetadata.author,
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `${siteMetadata.siteUrl}${pathname}`,
+    },
+    keywords: frontmatter.tag?.join(", "),
+    articleSection: frontmatter.category,
+  };
 
   return (
-    <>
-      <title>{title}</title>
-      <link rel="canonical" href={url} />
-      <meta name="description" content={description} />
-      <meta name="robots" content="index, follow" />
-      {/* Open Graph 메타 태그: 페이스북, 카카오톡 등 소셜 미디어 공유용 */}
-      <meta property="og:title" content={title} />
-      <meta property="og:description" content={description} />
-      <meta property="og:type" content="article" />
-      <meta property="og:url" content={url} />
-      {image && <meta property="og:image" content={image} />}
-      {/* Twitter Card 메타 태그: 트위터 공유용 */}
-      <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:title" content={title} />
-      <meta name="twitter:description" content={description} />
-      {image && <meta name="twitter:image" content={image} />}
-    </>
+    <SEO title={title} description={description} pathname={pathname} image={image} type="article">
+      <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+    </SEO>
   );
 };
 

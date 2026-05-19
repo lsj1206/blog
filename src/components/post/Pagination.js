@@ -32,9 +32,21 @@ const Pagination = ({ totalPageSize, nowPage, onPageChange }) => {
   const pageNumbers = getPageNumbers();
 
   return (
-    <Wrapper>
-      <MoveButton size={[20, 20]} icon={PrevShiftIcon} onClick={() => onPageChange(1)} />
-      <MoveButton size={[20, 20]} icon={PrevIcon} onClick={() => onPageChange(Math.max(1, nowPage - 1))} />
+    <Wrapper aria-label="Pagination">
+      <MoveButton
+        size={[20, 20]}
+        icon={PrevShiftIcon}
+        onClick={() => onPageChange(1)}
+        ariaLabel="Go to first page"
+        disabled={nowPage === 1}
+      />
+      <MoveButton
+        size={[20, 20]}
+        icon={PrevIcon}
+        onClick={() => onPageChange(Math.max(1, nowPage - 1))}
+        ariaLabel="Go to previous page"
+        disabled={nowPage === 1}
+      />
       <NumberButtons>
         {pageNumbers.map((page) => (
           <NumberButton
@@ -42,17 +54,31 @@ const Pagination = ({ totalPageSize, nowPage, onPageChange }) => {
             size={[30, 30]}
             text={page}
             $onPage={page === nowPage}
+            ariaLabel={`Go to page ${page}`}
+            aria-current={page === nowPage ? "page" : undefined}
             onClick={() => onPageChange(page)}
           />
         ))}
       </NumberButtons>
-      <MoveButton size={[20, 20]} icon={NextIcon} onClick={() => onPageChange(Math.min(totalPageSize, nowPage + 1))} />
-      <MoveButton size={[20, 20]} icon={NextShiftIcon} onClick={() => onPageChange(totalPageSize)} />
+      <MoveButton
+        size={[20, 20]}
+        icon={NextIcon}
+        onClick={() => onPageChange(Math.min(totalPageSize, nowPage + 1))}
+        ariaLabel="Go to next page"
+        disabled={nowPage === totalPageSize}
+      />
+      <MoveButton
+        size={[20, 20]}
+        icon={NextShiftIcon}
+        onClick={() => onPageChange(totalPageSize)}
+        ariaLabel="Go to last page"
+        disabled={nowPage === totalPageSize}
+      />
     </Wrapper>
   );
 };
 
-const Wrapper = styled.div`
+const Wrapper = styled.nav`
   display: flex;
   align-items: center;
   flex-direction: row;

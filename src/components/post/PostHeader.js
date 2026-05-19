@@ -1,49 +1,46 @@
 // Post Header Component
 import React from "react";
-import { navigate } from "gatsby";
+import { Link } from "gatsby";
 import { GatsbyImage, getImage } from "gatsby-plugin-image";
 import { styled } from "../../styles/Theme";
 // Assets
 import { CategoryIcon, DateIcon, TagsIcon, LastDateIcon } from "../../assets/assets";
 
+const categoryPath = (category) => `/category/${encodeURIComponent(category)}`;
+const tagPath = (tag) => `/search?tag=${encodeURIComponent(tag)}`;
+
 const PostHeader = ({ className, postData }) => {
-  const onClickCategory = (category) => {
-    navigate(`/category/${category}`);
-  };
-
-  const onClickTag = (tag) => {
-    navigate(`/search?tag=${encodeURIComponent(tag)}`);
-  };
-
   return (
     <Wrapper className={className}>
       <Title>{postData?.title}</Title>
       <BorderLine />
       <InfoContainer>
-        <Category onClick={() => onClickCategory(postData?.category)}>
-          <CategoryIcon />
-          {postData?.category}
-        </Category>
+        {postData?.category && (
+          <Category to={categoryPath(postData.category)}>
+            <CategoryIcon aria-hidden="true" focusable="false" />
+            {postData.category}
+          </Category>
+        )}
         <InfoText>
-          <DateIcon />
+          <DateIcon aria-hidden="true" focusable="false" />
           {postData?.createDate}
         </InfoText>
         <InfoText>
-          <LastDateIcon />
+          <LastDateIcon aria-hidden="true" focusable="false" />
           {postData?.lastDate}
         </InfoText>
       </InfoContainer>
-      <TagContainer>
-        <TagsIcon />
+      <TagContainer aria-label="Post tags">
+        <TagsIcon aria-hidden="true" focusable="false" />
         {postData?.tag &&
-          postData?.tag.map((tag, index) => (
-            <TagItem key={index} onClick={() => onClickTag(tag)}>
+          postData?.tag.map((tag) => (
+            <TagItem key={tag} to={tagPath(tag)}>
               {tag}
             </TagItem>
           ))}
       </TagContainer>
       <ImgContainer>
-        <Img image={getImage(postData?.coverImage)} alt="_coverImage" />
+        <Img image={getImage(postData?.coverImage)} alt={postData?.title || "Post cover image"} />
       </ImgContainer>
     </Wrapper>
   );
@@ -61,7 +58,7 @@ const BorderLine = styled.div`
   background-color: ${({ theme }) => theme.brLine};
 `;
 
-const Title = styled.h2`
+const Title = styled.h1`
   margin: 0;
 `;
 
@@ -70,20 +67,25 @@ const InfoContainer = styled.div`
   justify-content: space-between;
   margin-bottom: 10px;
 
-  // 0px ~ 768px
-  @media (max-width: 768px) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     flex-direction: column;
     justify-content: flex-start;
   }
 `;
 
-const InfoText = styled.p`
+const infoTextStyle = `
   display: flex;
   align-items: center;
   margin-right: 0.5rem;
-  color: ${({ theme }) => theme.bgText};
+  color: inherit;
   font-weight: bolder;
+  text-decoration: none;
   text-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+`;
+
+const InfoText = styled.p`
+  ${infoTextStyle}
+  color: ${({ theme }) => theme.bgText};
 
   svg {
     flex-shrink: 0;
@@ -94,16 +96,26 @@ const InfoText = styled.p`
   }
 `;
 
-const Category = styled(InfoText)`
+const Category = styled(Link)`
+  ${infoTextStyle}
   flex: 1;
-  text-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+  color: ${({ theme }) => theme.bgText};
   cursor: pointer;
 
-  svg {
-    margin: 0 0.5rem 0 0;
+  &:visited {
+    color: ${({ theme }) => theme.bgText};
   }
 
-  &:hover {
+  svg {
+    flex-shrink: 0;
+    margin: 0 0.5rem 0 0;
+    width: 1rem;
+    height: 1rem;
+    fill: ${({ theme }) => theme.bgText};
+  }
+
+  &:hover,
+  &:focus-visible {
     color: ${({ theme }) => theme.highlightText};
     transform: scale(1.025);
   }
@@ -113,7 +125,7 @@ const Category = styled(InfoText)`
   }
 `;
 
-const TagContainer = styled.div`
+const TagContainer = styled.nav`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -129,7 +141,7 @@ const TagContainer = styled.div`
   }
 `;
 
-const TagItem = styled.p`
+const TagItem = styled(Link)`
   display: flex;
   align-items: center;
   margin: 0 0.5rem 0.5rem 0;
@@ -139,16 +151,19 @@ const TagItem = styled.p`
   color: ${({ theme }) => theme.btnActive};
   font-size: 0.9rem;
   font-weight: bolder;
+  text-decoration: none;
   border-radius: 0.25rem;
   box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
   cursor: pointer;
 
-  &:hover {
+  &:visited {
+    color: ${({ theme }) => theme.btnActive};
+  }
+
+  &:hover,
+  &:focus-visible {
     color: ${({ theme }) => theme.highlightText};
     transform: scale(1.025);
-    span {
-      color: ${({ theme }) => theme.warningText};
-    }
   }
 
   &:active {

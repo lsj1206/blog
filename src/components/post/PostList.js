@@ -42,6 +42,7 @@ const PostList = ({ className, postlist, listName }) => {
           <SortButton
             size={[30, 30]}
             icon={SortIcon}
+            ariaLabel="Sort posts"
             list={SortTable}
             onClick={(option) => {
               setSorting(option);
@@ -78,8 +79,7 @@ const ListContainer = styled.div`
   display: flex;
   flex-direction: column;
 
-  // 0 ~ 1279px
-  @media (max-width: 1279px) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
     width: 95%;
   }
 `;

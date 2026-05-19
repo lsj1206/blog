@@ -50,7 +50,7 @@ exports.createPages = async ({ actions, graphql }) => {
   // 카테고리를 기반으로 동적 페이지 생성
   categoryList.forEach((category) => {
     createPage({
-      path: `/category/${category}`, // URL
+      path: `/category/${encodeURIComponent(category)}`, // URL
       component: path.resolve("./src/templates/category-template.js"),
       context: {
         category,

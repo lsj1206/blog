@@ -5,6 +5,8 @@ import { styled } from "../styles/Theme";
 import userData, { blogData } from "../../user-data";
 // Assets
 import { EmailIcon, CodeIcon, GitHubIcon } from "../assets/assets";
+// Components
+import SEO from "../components/seo/SEO";
 
 const AboutPage = () => {
   return (
@@ -15,7 +17,7 @@ const AboutPage = () => {
         <ImgContainer>
           <StaticImage
             src="../assets/images/Profile.png"
-            alt="_profile"
+            alt={`${userData.name} profile`}
             placeholder="blurred"
             layout="constrained"
             formats={["webp", "avif"]}
@@ -24,12 +26,12 @@ const AboutPage = () => {
         <TextContainer>
           <Header>{userData.name}</Header>
           <DescText>{userData.self_introduction}</DescText>
-          <LinkText href={`mailto:${userData.github_link}`} target="_blank" rel="noopener noreferrer nofollow">
-            <EmailIcon />
+          <LinkText href={`mailto:${userData.email}`} rel="nofollow">
+            <EmailIcon aria-hidden="true" focusable="false" />
             {"Email"}
           </LinkText>
           <LinkText href={userData.github_link} target="_blank" rel="noopener noreferrer nofollow">
-            <GitHubIcon />
+            <GitHubIcon aria-hidden="true" focusable="false" />
             {"Github"}
           </LinkText>
         </TextContainer>
@@ -38,10 +40,10 @@ const AboutPage = () => {
         <BlogContainer>
           <Header>{blogData.title}</Header>
           <DescText>{blogData.description}</DescText>
-          <Text>{`개발 기간 : ${blogData.start_date} - ${blogData.end_date}`}</Text>
+          <Text>{`Development period: ${blogData.start_date} - ${blogData.end_date}`}</Text>
           <BottomContainer>
             <LinkText href={blogData.repository} target="_blank" rel="noopener noreferrer nofollow">
-              <CodeIcon />
+              <CodeIcon aria-hidden="true" focusable="false" />
               {"Repository"}
             </LinkText>
             <SmallText>
@@ -62,14 +64,13 @@ const AboutPage = () => {
   );
 };
 
-const PageWrapper = styled.div`
+const PageWrapper = styled.section`
   display: flex;
   flex-direction: column;
   padding-top: 30px;
   width: 768px;
 
-  // 0 ~ 768px
-  @media (max-width: 768px) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     width: 75vw;
   }
 `;
@@ -95,8 +96,7 @@ const Card = styled.div`
   background-color: ${({ theme }) => theme.bgMainSub};
   box-shadow: 1px 3px 5px rgba(0, 0, 0, 0.25);
 
-  // 0 ~ 768px
-  @media (max-width: 768px) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     flex-direction: column;
     padding: 0 15px;
     padding-top: 15px;
@@ -118,10 +118,6 @@ const ImgContainer = styled.div`
     transform: scale(1.125);
     transition: transform 0.3s ease-in-out;
   }
-
-  // 0 ~ 480px
-  @media (max-width: 480px) {
-  }
 `;
 
 const TextContainer = styled.div`
@@ -132,8 +128,7 @@ const TextContainer = styled.div`
   width: 100%;
   height: 100%;
 
-  // 0 ~ 768px
-  @media (max-width: 768px) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     padding: 15px;
   }
 `;
@@ -180,6 +175,7 @@ const LinkText = styled.a`
   color: ${({ theme }) => theme.bgText};
   font-size: 1.15rem;
   font-weight: bolder;
+  text-decoration: none;
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.25);
   cursor: pointer;
 
@@ -191,7 +187,12 @@ const LinkText = styled.a`
     fill: ${({ theme }) => theme.bgText};
   }
 
-  &:hover {
+  &:visited {
+    color: ${({ theme }) => theme.bgText};
+  }
+
+  &:hover,
+  &:focus-visible {
     color: ${({ theme }) => theme.highlightText};
     font-weight: bolder;
     transform: scale(1.025);
@@ -211,13 +212,11 @@ const BottomContainer = styled.div`
   flex-direction: row;
   justify-content: space-between;
 
-  // 0 ~ 768px
-  @media (max-width: 768px) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     margin: 0.5rem 0;
   }
 
-  // 0 ~ 480px
-  @media (max-width: 480px) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.narrow}) {
     flex-direction: column;
   }
 `;
@@ -226,8 +225,7 @@ const SmallText = styled.p`
   display: flex;
   flex-direction: column;
 
-  // 0 ~ 768px
-  @media (max-width: 480px) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.narrow}) {
     justify-content: flex-end;
     font-size: 0.8rem;
   }
@@ -237,9 +235,15 @@ const SmallAnchor = styled.a`
   color: ${({ theme }) => theme.bgText};
   font-size: 0.9rem;
   text-align: end;
+  text-decoration: none;
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
 
-  &:hover {
+  &:visited {
+    color: ${({ theme }) => theme.bgText};
+  }
+
+  &:hover,
+  &:focus-visible {
     color: ${({ theme }) => theme.highlightText};
     transform: scale(1.025);
   }
@@ -249,6 +253,8 @@ const SmallAnchor = styled.a`
   }
 `;
 
-export const Head = () => <title>{userData.title}</title>;
+export const Head = () => (
+  <SEO title="About" description={userData.self_introduction} pathname="/about/" type="profile" />
+);
 
 export default AboutPage;

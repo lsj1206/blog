@@ -1,49 +1,85 @@
 // SVG Icon Button Component (ReactComponent)
 import React from "react";
-import { styled } from "../../styles/Theme";
+import { Link } from "gatsby";
+import { css, styled } from "../../styles/Theme";
 
-const IconButton = ({ className, size = [30, 30], icon: Icon, onClick, link }) => {
-  // 링크가 존재할 경우 해당 URL로 리디렉션
-  const handleClick = (e) => {
-    if (link) {
-      window.open(link, "_blank"); // 리디렉션할때 New Tab
-    } else if (onClick) {
-      onClick(e);
-    }
+const IconButton = ({ className, size = [30, 30], icon: Icon, onClick, href, to, ariaLabel, ...buttonProps }) => {
+  const content = Icon ? <Icon aria-hidden="true" focusable="false" /> : null;
+  const commonProps = {
+    className,
+    "aria-label": ariaLabel || "Icon button",
+    $width: size[0],
+    $height: size[1],
+    ...buttonProps,
   };
 
+  if (to) {
+    return (
+      <LinkContainer {...commonProps} to={to}>
+        {content}
+      </LinkContainer>
+    );
+  }
+
+  if (href) {
+    return (
+      <AnchorContainer {...commonProps} href={href} target="_blank" rel="noopener noreferrer">
+        {content}
+      </AnchorContainer>
+    );
+  }
+
   return (
-    <ButtonContainer className={className} onClick={handleClick} width={size[0]} height={size[1]}>
-      <Icon />
+    <ButtonContainer {...commonProps} type="button" onClick={onClick}>
+      {content}
     </ButtonContainer>
   );
 };
 
-const ButtonContainer = styled.button`
+const iconButtonStyle = css`
   z-index: 10;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 5px;
-  width: ${({ width }) => width}px;
-  height: ${({ height }) => height}px;
+  width: ${({ $width }) => $width}px;
+  height: ${({ $height }) => $height}px;
   background-color: transparent;
   border: none;
   cursor: pointer;
+  text-decoration: none;
 
   svg {
     width: 100%;
     height: 100%;
     fill: ${({ theme }) => theme.btn};
-
-    &:hover {
-      fill: ${({ theme }) => theme.btnActive};
-    }
-
-    &:active {
-      transform: scale(0.95);
-    }
   }
+
+  &:hover svg,
+  &:focus-visible svg {
+    fill: ${({ theme }) => theme.btnActive};
+  }
+
+  &:active svg {
+    transform: scale(0.95);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.45;
+  }
+`;
+
+const ButtonContainer = styled.button`
+  ${iconButtonStyle}
+`;
+
+const AnchorContainer = styled.a`
+  ${iconButtonStyle}
+`;
+
+const LinkContainer = styled(Link)`
+  ${iconButtonStyle}
 `;
 
 export default IconButton;

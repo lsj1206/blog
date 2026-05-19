@@ -64,10 +64,17 @@ module.exports = {
       },
     },
     {
+      resolve: `gatsby-plugin-sitemap`,
+      options: {
+        output: `/`,
+        excludes: [`/404/`, `/dev-404-page/`, `/search/`],
+      },
+    },
+    {
       resolve: `gatsby-plugin-robots-txt`,
       options: {
         host: `https://lsj1206.github.io/`,
-        sitemap: `https://lsj1206.github.io/sitemap.xml`,
+        sitemap: `https://lsj1206.github.io/sitemap-index.xml`,
         policy: [
           {
             userAgent: `*`,

@@ -7,6 +7,13 @@ const md = {
   visitedLink: "#9370DB",
 };
 
+const breakpoints = {
+  narrow: "480px",
+  mobile: "768px",
+  tablet: "1279px",
+  desktop: "1440px",
+};
+
 export const light = {
   brLine: "#585858",
   bgMain: "#FFFFFF",
@@ -22,6 +29,7 @@ export const light = {
   highlightText: "#4682B4",
   warningText: "#8B0000",
   md: { ...md },
+  breakpoints: { ...breakpoints },
 };
 
 export const dark = {
@@ -39,8 +47,9 @@ export const dark = {
   highlightText: "#87CEEB",
   warningText: "#F08080",
   md: { ...md },
+  breakpoints: { ...breakpoints },
 };
 
 // styled-components를 기본으로 내보냄
-const { default: styled, createGlobalStyle } = styledComponents;
-export { styled, createGlobalStyle };
+const { default: styled, createGlobalStyle, css } = styledComponents;
+export { styled, createGlobalStyle, css };

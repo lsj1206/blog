@@ -1,25 +1,31 @@
 import { useState, useCallback, useEffect } from "react";
 
+const getStoredTheme = () => {
+  if (typeof window === "undefined") {
+    return "light";
+  }
+
+  const savedTheme = window.localStorage.getItem("theme");
+  if (savedTheme) {
+    return savedTheme;
+  }
+
+  return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+};
+
 const useTheme = () => {
-  const [theme, setTheme] = useState(() => {
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme) {
-      return savedTheme;
-    }
-    return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-  });
+  const [theme, setTheme] = useState("light");
 
   const onChangeTheme = useCallback(() => {
     const updatedTheme = theme === "light" ? "dark" : "light";
     setTheme(updatedTheme);
-    localStorage.setItem("theme", updatedTheme);
+    if (typeof window !== "undefined") {
+      window.localStorage.setItem("theme", updatedTheme);
+    }
   }, [theme]);
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme) {
-      setTheme(savedTheme);
-    }
+    setTheme(getStoredTheme());
   }, []);
 
   return {
