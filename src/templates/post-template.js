@@ -8,7 +8,7 @@ import { giscusData } from "../../user-data";
 // Components
 import PostHeader from "../components/post/PostHeader";
 import TableOfContents from "../components/post/TableofContents";
-import SEO, { siteMetadata, toAbsoluteUrl } from "../components/seo/SEO";
+import SEO, { buildUrl, siteMetadata, toAbsoluteUrl } from "../components/seo/SEO";
 
 const PostTemplate = ({ data }) => {
   if (!data) {
@@ -134,7 +134,7 @@ export const Head = ({ data }) => {
     },
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": `${siteMetadata.siteUrl}${pathname}`,
+      "@id": buildUrl(pathname),
     },
     keywords: frontmatter.tag?.join(", "),
     articleSection: frontmatter.category,

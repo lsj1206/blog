@@ -8,9 +8,9 @@
     "gatsby"
   ],
   "scripts": {
-    "deploy": "gatsby build && gh-pages -d public --nojekyll -r https://github.com/lsj1206/lsj1206.github.io.git",
     "start": "gatsby develop",
     "build": "gatsby build",
+    "build:pages": "gatsby build --prefix-paths",
     "serve": "gatsby serve",
     "clean": "gatsby clean"
   },
@@ -34,7 +34,6 @@
     "gatsby-source-filesystem": "^5.14.0",
     "gatsby-transformer-remark": "^6.14.0",
     "gatsby-transformer-sharp": "^5.14.0",
-    "gh-pages": "^6.2.0",
     "prismjs": "^1.29.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

@@ -11,7 +11,7 @@ const userData = {
 
 // Giscus (Comment) Config Data
 const giscusData = {
-  repo: "lsj1206/lsj1206.github.io",
+  repo: "lsj1206/blog",
   repo_id: "R_kgDONRGoyQ",
   category: "Q&A",
   category_id: "DIC_kwDONRGoyc4ClfH_",
@@ -24,7 +24,7 @@ const giscusData = {
 
 // Blog Development Information
 const blogData = {
-  repository: `https://github.com/lsj1206/lsj1206.github.io`,
+  repository: `https://github.com/lsj1206/blog`,
   title: `Blog Development Information`,
   description: `React 기반의 정적 사이트 생성기(Static Site Generator)인 Gatsby를 사용하고 개발된 블로그 입니다.`,
   start_date: `2024.11.25`,

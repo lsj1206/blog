@@ -1,11 +1,16 @@
 // gatsby config
+const siteUrl = `https://lsj1206.github.io`;
+const pathPrefix = `/blog`;
+
 module.exports = {
+  pathPrefix,
   siteMetadata: {
     title: `TECH.log`,
     description: `기술 블로그에 오신 것을 환영합니다.`,
     author: `Lee SeoJun`,
-    siteUrl: `https://lsj1206.github.io`,
-    defaultImage: `./static/image/homepage.jpg`,
+    siteUrl,
+    pathPrefix,
+    defaultImage: `/image/homepage.jpg`,
     language: `ko`,
   },
   plugins: [
@@ -73,13 +78,13 @@ module.exports = {
     {
       resolve: `gatsby-plugin-robots-txt`,
       options: {
-        host: `https://lsj1206.github.io/`,
-        sitemap: `https://lsj1206.github.io/sitemap-index.xml`,
+        host: `${siteUrl}/`,
+        sitemap: `${siteUrl}${pathPrefix}/sitemap-index.xml`,
         policy: [
           {
             userAgent: `*`,
-            allow: [`/`, `/post/`],
-            disallow: [`/404/`, `/dev-404-page/`],
+            allow: [`${pathPrefix}/`, `${pathPrefix}/post/`],
+            disallow: [`${pathPrefix}/404/`, `${pathPrefix}/dev-404-page/`, `${pathPrefix}/search/`],
           },
         ],
       },

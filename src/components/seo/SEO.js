@@ -1,25 +1,58 @@
 import React from "react";
 import userData from "../../../user-data";
 
+const pathPrefix = "/blog";
+
+const normalizePathPrefix = (value) => {
+  if (!value || value === "/") {
+    return "";
+  }
+
+  return `/${value.replace(/^\/+|\/+$/g, "")}`;
+};
+
 export const siteMetadata = {
   title: userData.title,
   description: userData.blog_description,
   author: userData.name,
   siteUrl: userData.url,
+  pathPrefix,
   defaultImage: "/image/homepage.jpg",
 };
 
-export const buildUrl = (pathname = "/") => {
+export const withPathPrefix = (pathname = "/") => {
   if (!pathname) {
-    return siteMetadata.siteUrl;
+    return siteMetadata.pathPrefix || "/";
   }
 
   if (/^https?:\/\//i.test(pathname)) {
     return pathname;
   }
 
+  const normalizedPrefix = normalizePathPrefix(siteMetadata.pathPrefix);
   const normalizedPath = pathname.startsWith("/") ? pathname : `/${pathname}`;
-  return `${siteMetadata.siteUrl}${normalizedPath}`;
+
+  if (!normalizedPrefix) {
+    return normalizedPath;
+  }
+
+  if (normalizedPath === normalizedPrefix || normalizedPath.startsWith(`${normalizedPrefix}/`)) {
+    return normalizedPath;
+  }
+
+  return normalizedPath === "/" ? `${normalizedPrefix}/` : `${normalizedPrefix}${normalizedPath}`;
+};
+
+export const buildUrl = (pathname = "/") => {
+  if (!pathname) {
+    return `${siteMetadata.siteUrl}${withPathPrefix("/")}`;
+  }
+
+  if (/^https?:\/\//i.test(pathname)) {
+    return pathname;
+  }
+
+  return `${siteMetadata.siteUrl}${withPathPrefix(pathname)}`;
 };
 
 export const toAbsoluteUrl = (value) => {
