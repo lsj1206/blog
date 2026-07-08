@@ -58,23 +58,21 @@ https://[USER NAME].github.io/[REPOSITORY NAME]/
 
 - `gatsby-config.js`: `siteUrl`, `pathPrefix`
 - `src/components/seo/SEO.js`: `pathPrefix`
-- `user-data.js`: 사용자 정보, GitHub 링크, Giscus 설정, repository URL
+- `user-data.js`: 블로그 기본 정보와 Giscus 설정
 
 예를 들어 저장소 이름이 `blog`이면 `pathPrefix`는 `/blog`입니다. 저장소 이름이 `my-blog`이면 `pathPrefix`는 `/my-blog`로 맞춰야 합니다.
 
 ### 3. 기본 정보 수정
 
-블로그 소유자 정보와 댓글 설정을 본인 기준으로 수정합니다.
+블로그 기본 정보를 본인 기준으로 수정합니다.
 
 ```javascript
 // user-data.js
 const userData = {
-  url: `https://[USER NAME].github.io`,
+  url: `https://[USER NAME].github.io/`,
   title: `TECH.log`,
+  blog_description: `[BLOG DESCRIPTION]`,
   name: `[DISPLAY NAME]`,
-  self_introduction: `[SELF INTRODUCTION]`,
-  email: `[EMAIL]`,
-  github_link: `https://github.com/[USER NAME]`,
 };
 ```
 

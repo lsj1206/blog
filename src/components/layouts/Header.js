@@ -16,7 +16,9 @@ const Header = ({ className }) => {
     <HeaderContainer className={className}>
       <TitleContainer aria-label="Site identity">
         <HeaderTitle to="/">{userData.title}</HeaderTitle>
-        <NameText to="/about">{`/ ${userData.name}`}</NameText>
+        <NameText href={userData.url} aria-label="Open portfolio">
+          {`/ ${userData.name}`}
+        </NameText>
       </TitleContainer>
       <ButtonContainer aria-label="Site tools">
         <IconButton size={[32, 32]} icon={SearchIcon} to="/search" ariaLabel="Search posts" />
@@ -62,7 +64,7 @@ const HeaderTitle = styled(Link)`
   }
 `;
 
-const NameText = styled(Link)`
+const NameText = styled.a`
   margin: 0 0 0 5px;
   position: relative;
   color: ${({ theme }) => theme.btnText};
@@ -73,6 +75,11 @@ const NameText = styled(Link)`
 
   &:visited {
     color: ${({ theme }) => theme.btnText};
+  }
+
+  &:hover,
+  &:focus-visible {
+    color: ${({ theme }) => theme.highlightText};
   }
 `;
 

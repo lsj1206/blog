@@ -4,12 +4,6 @@
 import LightIcon from "./icons/sun.svg";
 import DarkIcon from "./icons/moon.svg";
 
-// About Page
-import AboutIcon from "./icons/circle-info.svg";
-import EmailIcon from "./icons/envelope.svg";
-import CodeIcon from "./icons/code.svg";
-import GitHubIcon from "./icons/github-brands.svg";
-
 // Common UI
 import HambergerIcon from "./icons/bars.svg";
 import SearchIcon from "./icons/magnifying-glass.svg";
@@ -28,14 +22,13 @@ import TagsIcon from "./icons/tags.svg";
 import DateIcon from "./icons/calendar.svg";
 import LastDateIcon from "./icons/calendar-check.svg";
 
-//Pagenation
+// Pagenation
 import PrevIcon from "./icons/angle-left.svg";
 import PrevShiftIcon from "./icons/angles-left.svg";
 import NextIcon from "./icons/angle-right.svg";
 import NextShiftIcon from "./icons/angles-right.svg";
 
 export { LightIcon, DarkIcon };
-export { AboutIcon, EmailIcon, CodeIcon, GitHubIcon };
 export { HambergerIcon, SearchIcon, CancelIcon, SortIcon, TableIcon };
 export { PageUpIcon, PageDownIcon };
 export { CategoryListIcon, CategoryIcon, TagsIcon, DateIcon, LastDateIcon };

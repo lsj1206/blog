@@ -43,10 +43,9 @@ main push
 /post/05/      -> /blog/post/05/
 /category/*    -> /blog/category/*
 /search/       -> /blog/search/
-/about/        -> /blog/about/
 ```
 
-GitHub Pages는 서버 레벨 redirect 설정이 제한적이므로, 루트 포트폴리오 repo에서 정적 redirect HTML 또는 404 client redirect 방식으로 호환성을 처리합니다.
+GitHub Pages는 서버 레벨 redirect 설정이 제한적이므로, 필요한 기존 게시글/카테고리/search URL 호환성은 루트 포트폴리오 repo에서 정적 redirect HTML 또는 404 client redirect 방식으로 처리합니다.
 
 ## Sitemap / robots
 
@@ -74,6 +73,6 @@ Giscus는 현재 `mapping: "pathname"`을 사용합니다.
 ## 구현 원칙
 
 - Gatsby 내부 `Link` 경로에는 `/blog`를 직접 붙이지 않습니다.
-- 코드의 내부 route는 `/post/*`, `/category/*`, `/search/`, `/about/` 형태를 유지합니다.
+- 코드의 내부 route는 `/post/*`, `/category/*`, `/search/` 형태를 유지합니다.
 - production Pages build에서 `pathPrefix: "/blog"`와 `--prefix-paths`가 `/blog` 하위 배포를 처리합니다.
 - canonical, Open Graph, Twitter image, JSON-LD URL은 `/blog` 기준 절대 URL로 생성합니다.
