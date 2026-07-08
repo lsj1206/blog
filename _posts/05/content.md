@@ -1,10 +1,10 @@
 ---
 title: "PixConvert 개발 일지"
 coverImage: "./_assets/pixconvert-cover.jpg"
-category: "C#"
-tag: ["C#", "WPF", ".NET", "ModernWPF", "SkiaSharp", "NetVips", "Image Processing"]
+category: "C-sharp"
+tag: ["C-sharp", "WPF", ".NET", "ModernWPF", "SkiaSharp", "NetVips", "Image Processing"]
 createDate: "2026-04-28"
-lastDate: "2026-04-28"
+lastDate: "2026-07-08"
 ---
 
 이 포스트는 Windows용 이미지 변환기 `PixConvert`를 개발하면서 진행했던 기획, 구조 설계, 변환 엔진 구현, 성능 최적화, 릴리즈 패키징 과정을 정리한 개발 일지입니다. 처음에는 가볍게 사용할 수 있는 이미지 확장자 변환 프로그램을 목표로 시작했지만, 개발 과정에서 파일 분석, 대량 처리, 병렬 변환, 프리셋, 다국어, 로그, 테스트, 배포 구조까지 확장하게 되었습니다.
