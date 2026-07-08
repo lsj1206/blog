@@ -1,94 +1,84 @@
-> ## [→ TECH.log/lsj1206](https://lsj1206.github.io)
+> ## [TECH.log/lsj1206](https://lsj1206.github.io/blog/)
 
-[![IMG](./static/image/homepage.jpg)](https://lsj1206.github.io)
+[![TECH.log homepage](./static/image/homepage.jpg)](https://lsj1206.github.io/blog/)
 
 ## 개요
 
-해당 블로그는 **Gatsby**와 **GitHub Pages**를 사용해서 개발된 개인 블로그 프로젝트입니다.
+이 저장소는 Gatsby로 만든 개인 기술 블로그입니다. 현재 블로그는 GitHub Pages project site로 배포되며, 실제 공개 주소는 `https://lsj1206.github.io/blog/`입니다.
 
-프로젝트는 _2024년 11월 25일_ - _2024년 12월 17일_ 동안 개발되었으며, 블로그 배포일은 _2024년 12월 26일_ 입니다.
+> 2024년 11월 - 12월 동안 개발되었으며, 최초 배포일은 2024년 12월 26일 입니다.
 
 ## 특징
 
-- **Non-DB** : DB와 서버가 없는 정적 웹사이트 구조로 더 빠르고 관리가 용이함.
-- **Markdown** : 간단한 텍스트 형식인 *Markdown*으로 블로그 포스트 작성.
-- **Comment** : *Github*의 _Discussions_ 기능을 사용하여 댓글 시스템 구현
-- **Responsive Web** : 반응형 웹디자인을 적용.
-- **Minimal Design** : 콘텐츠에 집중할 수 있도록 간단하고 깔끔한 UI 제공.
-- **Icon Button** : 아이콘을 사용하여 텍스트를 최소화한 UI 제공.
-- **Monospace Font** : 네이버에서 개발한 프로그래밍 글꼴인 [D2Coding](https://github.com/naver/d2codingfont) 폰트를 사용해 가독성 향상
+- **Static site**: Gatsby 기반 정적 사이트로 서버와 DB 없이 운영합니다.
+- **Markdown posts**: `_posts` 폴더의 Markdown 파일과 frontmatter로 게시글을 작성합니다.
+- **GitHub Pages Actions deploy**: `git push` 시 GitHub Actions에서 빌드하고 Pages artifact로 배포합니다.
+- **Giscus comments**: GitHub Discussions 기반 댓글 시스템을 사용합니다.
+- **Responsive layout**: 반응형 웹디자인으로 구현되어 있습니다.
+- **Monospace font**: 네이버에서 개발한 프로그래밍 글꼴인 [D2Coding](https://github.com/naver/d2codingfont)을 사용합니다.
+- **Local SVG icons**: Font Awesome SVG 파일을 로컬 asset으로 사용하며, 아이콘 라이선스 표기를 유지합니다.
 
-## 기술
+## 기술 스택
 
-- [**Gatsby 5.14 (React 18)**](https://www.gatsbyjs.com) : 정적 사이트 생성기
-- [**GitHub Flavored Markdown**](https://github.github.com/gfm) : GitHub에서 사용되는 확장된 Markdown
-- [**Giscus**](https://giscus.app/ko) : Github의 Discussions 기능을 사용하는 댓글 시스템
-- [**styled-components**](https://styled-components.com) : 컴포넌트 기반의 CSS 스타일링
-- [**Font Awesome**](https://fontawesome.com) : SVG 아이콘 라이브러리 (CC BY 4.0)
+- [Gatsby 5.14](https://www.gatsbyjs.com) + React 18
+- [styled-components 6.1](https://styled-components.com)
+- [GitHub Flavored Markdown](https://github.github.com/gfm)
+- [Giscus](https://giscus.app/ko)
+- `gatsby-plugin-sitemap`
+- `gatsby-plugin-robots-txt`
+- `gatsby-plugin-image` / `gatsby-plugin-sharp`
+- `gatsby-plugin-react-svg`
+- PrismJS
 
 ## 시작하기
 
-### 1. 리포지토리 클론
+### 1. 저장소 클론
 
 ```shell
-git clone https://github.com/lsj1206/lsj1206.github.io.git
+git clone https://github.com/lsj1206/blog.git [FOLDER NAME]
+cd [FOLDER NAME]
 ```
 
-#### 원격 저장소 URL 변경하기
+### 2. 본인 저장소로 연결
+
+GitHub에서 본인 블로그용 저장소를 만든 뒤, 로컬 저장소의 `origin`을 본인 저장소로 변경합니다.
 
 ```shell
-git remote set-url origin https://github.com/[ENTER NAME]/[ENTER REPOSITORY].git
-```
-
-#### 변경 후 확인
-
-```shell
+git remote set-url origin https://github.com/[USER NAME]/[REPOSITORY NAME].git
 git remote -v
 ```
 
-### 2. package.json 파일의 `deploy` 주소 수정
+GitHub Pages project site로 배포할 경우 공개 주소는 보통 다음 형태가 됩니다.
 
-```json
-"scripts": {
-    "deploy": "gatsby build --prefix-paths && gh-pages -d public -r https://github.com/[ENTER NAME]/[ENTER REPOSITORY].git",
-  },
+```text
+https://[USER NAME].github.io/[REPOSITORY NAME]/
 ```
 
-### 2. `siteUrl` 수정
+이 저장소는 현재 `https://lsj1206.github.io/blog/` 기준으로 설정되어 있으므로, 저장소 이름이나 사용자명이 다르면 아래 설정도 함께 수정해야 합니다.
 
-```javascript
-// gatsby-config.js
-siteMetadata: {
-    title: "TECH.log",
-    siteUrl: "https://[ENTER YOUR URL]",
-  },
-```
+- `gatsby-config.js`: `siteUrl`, `pathPrefix`
+- `src/components/seo/SEO.js`: `pathPrefix`
+- `user-data.js`: 사용자 정보, GitHub 링크, Giscus 설정, repository URL
 
-### 3. `User Data` 수정
+예를 들어 저장소 이름이 `blog`이면 `pathPrefix`는 `/blog`입니다. 저장소 이름이 `my-blog`이면 `pathPrefix`는 `/my-blog`로 맞춰야 합니다.
+
+### 3. 기본 정보 수정
+
+블로그 소유자 정보와 댓글 설정을 본인 기준으로 수정합니다.
 
 ```javascript
 // user-data.js
 const userData = {
-  url: `https://[ENTER LINK]`,
+  url: `https://[USER NAME].github.io`,
   title: `TECH.log`,
-  name: `[ENTER NAME]`,
-  self_introduction: `[ENTER SELF INTRODUCTION]`,
-  email: `[ENTER E-MAIL]`,
-  github_link: `https://github.com/[ENTER LINK]`,
+  name: `[DISPLAY NAME]`,
+  self_introduction: `[SELF INTRODUCTION]`,
+  email: `[EMAIL]`,
+  github_link: `https://github.com/[USER NAME]`,
 };
 ```
 
-### 4. Profile 수정
-
-`src/assets/images/Profile.png` 파일 변경 <br>
-만약 파일 주소나 이름이 변경된다면 아래 코드 변경
-
-```jsx
-// pages/about.js
-<StaticImage src="../assets/images/Profile.png" />
-```
-
-### 5. Giscus 설정
+### 4. Giscus 설정
 
 [Giscus](https://giscus.app/ko) 주소에 접속해서 설정 순서대로 진행
 
@@ -107,52 +97,145 @@ const giscusData = {
 };
 ```
 
-### 6. 포스트 작성
+## 포스트 작성
 
-`_posts` 폴더에 폴더를 생성하여 작성
+게시글은 `_posts` 폴더 아래에 slug 단위 폴더를 만들고 `content.md`로 작성합니다.
 
-#### 포스트 작성 규칙
-
-1. 아래와 같은 폴더 구조를 가져야 합니다.
-2. 폴더명은 포스트의 URL 마지막주소가 됩니다.
-3. 2번의 이유로 폴더명은 중복되지 않아야 합니다.
-4. 포스트 정보는 _.md_ 파일의 최상단에 작성되어야 합니다. _(Frontmatter)_
-
-```
+```text
 project-root/
 ├── _posts/
-│   ├── [포스트 URL 주소]/
+│   ├── [post-slug]/
 │   │   ├── _assets/
 │   │   │   └── image.jpg
 │   │   └── content.md
 └── README.md
 ```
 
-_Frontmatter_ 요구 사항
+작성 규칙은 다음과 같습니다.
+
+1. 폴더명이 게시글 URL의 마지막 segment가 됩니다.
+2. 폴더명은 중복되면 안 됩니다.
+3. 게시글 메타데이터는 `content.md` 최상단 frontmatter에 작성합니다.
+4. 이미지가 필요하면 같은 게시글 폴더의 `_assets` 아래에 둡니다.
+
+Frontmatter 예시는 다음과 같습니다.
 
 ```markdown
 ---
-title: "Temp Post" // 포스트 제목
-coverImage: "./_assets/image1.jpg" //포스트 커버 이미지
-category: "Temp" //카테고리
-tag: ["Temporary Files", "React", "Gatsby", "styled-components"] //태그 목록
-createDate: "2024-11-25" // 최초 작성일
-lastDate: "2024-12-12" // 최종 수정일
+title: "Temp Post"
+coverImage: "./_assets/image1.jpg"
+category: "C-sharp"
+tag: ["C-sharp", "WPF", ".NET"]
+createDate: "2026-04-28"
+lastDate: "2026-07-08"
 ---
 ```
 
-#### 7. Github Pages 설정
+`category`는 `/category/[category]/` 페이지 생성에 사용되고, `tag`는 검색 페이지의 tag query와 tag 목록에 사용됩니다.
 
-이제 레포지토리에서 GitHub Pages를 활성화해야 합니다.
+> URL에 들어갈 수 있는 category/tag 값은 일관된 표기를 사용하는 것이 좋습니다. <br />
+> 예를 들어 C# 계열은 `C#` 대신 `C-sharp`처럼 URL에 안전한 표기를 사용합니다.
 
-1. 레포지토리로 이동합니다.
-2. 상단의 Settings 탭으로 이동해서, 왼쪽 메뉴에서 Pages를 클릭합니다.
-3. Source 옵션에서 gh-pages 브랜치를 선택하고, Save를 클릭하여 변경사항을 저장합니다.
+## 배포
 
-#### 8. 배포 실행 및 확인
+배포는 `.github/workflows/deploy.yml`에서 처리합니다. 로컬에서 별도 배포 명령을 실행하지 않고, `main` branch에 push하면 GitHub Actions가 자동으로 빌드와 배포를 진행합니다.
+
+### 1. GitHub Pages 설정
+
+GitHub 저장소에서 다음 설정을 사용합니다.
+
+1. `Settings -> Pages -> Source`: `GitHub Actions`
+2. `Settings -> Actions -> General -> Workflow permissions`: `Read and write permissions`
+
+> GitHub Pages가 추천하는 Gatsby workflow 템플릿의 `Configure` 버튼은 사용하지 않습니다.<br />
+> 이 저장소에는 이미 Pages artifact 배포용 workflow가 있습니다.
+
+### 2. 변경사항 push
+
+포스트 작성과 설정 수정을 마쳤다면 변경사항을 커밋하고 push합니다.
 
 ```shell
-npm run deploy
+git add .
+git commit -m "[커밋 메세지]"
+git push origin main
 ```
 
-배포가 완료되면 사이트가 정상적으로 표시되는지 확인합니다.
+### 3. Actions 확인
+
+push 후 GitHub 저장소의 `Actions` 탭에서 `Deploy Blog to GitHub Pages` workflow가 성공했는지 확인합니다.
+
+Workflow 동작은 다음과 같습니다.
+
+| 단계     | 내용                                    |
+| -------- | --------------------------------------- |
+| Trigger  | `main` branch push, `workflow_dispatch` |
+| Node.js  | `24`                                    |
+| Install  | `npm ci`                                |
+| Build    | `npm run build:pages`                   |
+| Artifact | `actions/upload-pages-artifact`         |
+| Deploy   | `actions/deploy-pages`                  |
+
+배포가 성공하면 GitHub Pages 주소에서 블로그를 확인합니다.
+
+```text
+https://[USER NAME].github.io/[REPOSITORY NAME]/
+```
+
+## 로컬 작업 및 빌드
+
+바로 push해서 공개하지 않고, 로컬에서 글이나 디자인을 확인하면서 작업하고 싶을 때 사용하는 명령어입니다.
+
+### 의존성 설치
+
+```shell
+npm ci
+```
+
+처음 클론한 뒤 로컬에서 개발 서버나 빌드를 실행하려면 먼저 의존성을 설치해야 합니다.
+
+### 로컬 개발 서버 실행
+
+```shell
+npm run start
+```
+
+`gatsby develop`을 실행합니다. 글 작성, 디자인 수정, 컴포넌트 수정 내용을 브라우저에서 바로 확인할 때 사용합니다.
+
+기본 확인 주소는 다음과 같습니다.
+
+```text
+http://localhost:8000
+```
+
+### 일반 Gatsby 빌드
+
+```shell
+npm run build
+```
+
+`gatsby build`를 실행합니다. Gatsby가 정적 HTML/CSS/JS를 정상 생성하는지 확인하는 일반 빌드입니다. 이 명령은 `/blog` 같은 GitHub Pages project site prefix를 붙이지 않습니다.
+
+### GitHub Pages 조건 빌드
+
+```shell
+npm run build:pages
+```
+
+`gatsby build --prefix-paths`를 실행합니다. 실제 GitHub Pages project site 배포와 같은 조건으로 빌드하려면 이 명령을 사용합니다.
+
+배포 전에 asset 경로, 내부 링크, canonical, sitemap이 project site 경로 기준으로 생성되는지 확인할 때 사용합니다.
+
+### Gatsby 캐시 정리
+
+```shell
+npm run clean
+```
+
+Gatsby의 이전 캐시와 빌드 산출물을 정리합니다. Markdown frontmatter, GraphQL 데이터, 이미지 처리 결과가 예상과 다르게 보일 때 사용합니다.
+
+캐시를 정리한 뒤 Pages 조건으로 다시 확인하려면 다음 순서로 실행합니다.
+
+```shell
+npm run clean
+npm run build:pages
+```
