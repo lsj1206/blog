@@ -1,8 +1,7 @@
 // Searching Page
 import React, { useState, useEffect } from "react";
 import { graphql, Link, navigate } from "gatsby";
-import { useLocation } from "@reach/router"; // 쿼리스트링 읽기 위해 추가
-import queryString from "query-string"; // 쿼리스트링 파싱을 위해 추가 설치
+import { useLocation } from "@reach/router";
 import { styled } from "../styles/Theme";
 // Assets
 import { SearchIcon, CancelIcon, TagsIcon } from "../assets/assets";
@@ -44,8 +43,8 @@ const SearchingPage = ({ data }) => {
   };
 
   useEffect(() => {
-    const params = queryString.parse(location.search);
-    setQuery(typeof params.tag === "string" ? params.tag : "");
+    const tag = new URLSearchParams(location.search).get("tag");
+    setQuery(tag || "");
   }, [location.search]);
 
   return (
