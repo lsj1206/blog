@@ -3,6 +3,8 @@ import userData from "../../../user-data";
 
 const pathPrefix = "/blog";
 
+const normalizeSiteUrl = (value = "") => value.replace(/\/+$/g, "");
+
 const normalizePathPrefix = (value) => {
   if (!value || value === "/") {
     return "";
@@ -15,7 +17,7 @@ export const siteMetadata = {
   title: userData.title,
   description: userData.blog_description,
   author: userData.name,
-  siteUrl: userData.url,
+  siteUrl: normalizeSiteUrl(userData.url),
   pathPrefix,
   defaultImage: "/image/homepage.jpg",
 };
