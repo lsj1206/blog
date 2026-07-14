@@ -1,5 +1,5 @@
 // Category List Page Template
-import React from "react";
+import React, { useEffect } from "react";
 import { graphql, navigate } from "gatsby";
 import { styled } from "../styles/Theme";
 // Hooks
@@ -9,10 +9,18 @@ import PostList from "../components/post/PostList";
 import SEO from "../components/seo/SEO";
 
 const CategoryTemplate = ({ data, pageContext }) => {
-  if (!data) {
-    navigate(`/404`);
-  }
   const postList = usePostList(data);
+  const hasPostData = Boolean(data?.allMarkdownRemark);
+
+  useEffect(() => {
+    if (!hasPostData) {
+      navigate(`/404`, { replace: true });
+    }
+  }, [hasPostData]);
+
+  if (!hasPostData) {
+    return null;
+  }
 
   return (
     <PageWrapper>

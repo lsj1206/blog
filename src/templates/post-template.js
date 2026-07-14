@@ -1,5 +1,5 @@
 // Post Content Page Template
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { graphql, navigate } from "gatsby";
 import Giscus from "@giscus/react";
 import { ThemeContext } from "../context/ThemeProvider";
@@ -11,15 +11,22 @@ import TableOfContents from "../components/post/TableofContents";
 import SEO, { buildUrl, siteMetadata, toAbsoluteUrl } from "../components/seo/SEO";
 
 const PostTemplate = ({ data }) => {
-  if (!data) {
-    navigate(`/404`);
-  }
-
   const post = data?.markdownRemark;
-  const postData = data?.markdownRemark.frontmatter;
-
   const { theme } = useContext(ThemeContext);
   const giscusTheme = theme === "light" ? "noborder_light" : "noborder_gray";
+  const hasPost = Boolean(post);
+
+  useEffect(() => {
+    if (!hasPost) {
+      navigate(`/404`, { replace: true });
+    }
+  }, [hasPost]);
+
+  if (!post) {
+    return null;
+  }
+
+  const postData = post.frontmatter;
 
   return (
     <PageWrapper>
@@ -114,6 +121,18 @@ export const query = graphql`
 
 export const Head = ({ data }) => {
   const post = data?.markdownRemark;
+
+  if (!post) {
+    return (
+      <SEO
+        title="Not found"
+        description="The requested post could not be found."
+        pathname="/404/"
+        robots="noindex, nofollow"
+      />
+    );
+  }
+
   const frontmatter = post?.frontmatter || {};
   const title = frontmatter.title || "Empty title..";
   const description = post?.excerpt || title;
