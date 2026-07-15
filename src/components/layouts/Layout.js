@@ -19,9 +19,9 @@ const Layout = ({ children }) => {
     <>
       <GlobalStyle />
       <Background>
-        <Header />
+        <Header sideOpen={sideOpen} toggleSideOpen={toggleSideOpen} />
         <Sidebar open={sideOpen} setOpen={setSideOpen} />
-        <FloatingBox toggleSideOpen={toggleSideOpen} />
+        <FloatingBox />
         <Content>{children}</Content>
         <Footer />
       </Background>

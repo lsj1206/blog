@@ -159,6 +159,7 @@ const SearchBar = styled.input`
 const SearchButton = styled(IconButton)`
   z-index: 10;
   align-items: center;
+  padding: 2px;
   position: absolute;
   right: 12px;
 `;
@@ -173,8 +174,8 @@ const TagContainer = styled.div`
   svg {
     flex-shrink: 0;
     margin: 0.65rem 0.25rem 0 0;
-    width: 1.25rem;
-    height: 1.25rem;
+    width: 1.5rem;
+    height: 1.5rem;
     fill: ${({ theme }) => theme.bgText};
   }
 

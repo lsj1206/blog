@@ -2,11 +2,11 @@
 import React from "react";
 import { styled } from "../../styles/Theme";
 // Assets
-import { HambergerIcon, PageUpIcon, PageDownIcon } from "../../assets/assets";
+import { PageUpIcon, PageDownIcon } from "../../assets/assets";
 // Components
 import IconButton from "../buttons/IconButton";
 
-const FloatingBox = ({ className, toggleSideOpen }) => {
+const FloatingBox = ({ className }) => {
   const topScroll = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -16,21 +16,20 @@ const FloatingBox = ({ className, toggleSideOpen }) => {
   };
 
   return (
-    <FloatingContainer className={className} aria-label="Page controls">
+    <ScrollControls className={className} aria-label="Page scroll controls">
       <FloatingButton size={[36, 36]} icon={PageUpIcon} onClick={topScroll} ariaLabel="Scroll to top" />
       <FloatingButton size={[36, 36]} icon={PageDownIcon} onClick={buttomScroll} ariaLabel="Scroll to bottom" />
-      <FloatingMenuButton size={[36, 36]} icon={HambergerIcon} onClick={toggleSideOpen} ariaLabel="Toggle category menu" />
-    </FloatingContainer>
+    </ScrollControls>
   );
 };
 
-const FloatingContainer = styled.nav`
+const ScrollControls = styled.nav`
   z-index: 700;
   display: flex;
   flex-direction: column;
   position: fixed;
-  bottom: 0;
   right: 0;
+  bottom: 0;
 `;
 
 const FloatingButton = styled(IconButton)`
@@ -38,18 +37,6 @@ const FloatingButton = styled(IconButton)`
   padding: 3px;
   background-color: ${({ theme }) => theme.bgLayout};
   border-radius: 50%;
-`;
-
-const FloatingMenuButton = styled(IconButton)`
-  display: none;
-  margin: 3px;
-  padding: 7px;
-  background-color: ${({ theme }) => theme.bgLayout};
-  border-radius: 50%;
-
-  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
-    display: flex;
-  }
 `;
 
 export default FloatingBox;

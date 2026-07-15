@@ -123,8 +123,8 @@ const Text = styled.p`
   svg {
     flex-shrink: 0;
     margin: 0 0.5rem 0 1rem;
-    width: 1rem;
-    height: 1rem;
+    width: 1.125rem;
+    height: 1.125rem;
     fill: ${({ theme }) => theme.bgText};
   }
 
@@ -144,8 +144,8 @@ const TagContainer = styled.div`
   svg {
     flex-shrink: 0;
     margin: 0.3rem 0.3rem 0 0;
-    width: 1rem;
-    height: 1rem;
+    width: 1.125rem;
+    height: 1.125rem;
     fill: ${({ theme }) => theme.bgText};
   }
 `;

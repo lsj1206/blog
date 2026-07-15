@@ -90,8 +90,8 @@ const InfoText = styled.p`
   svg {
     flex-shrink: 0;
     margin: 0 0.5rem 0 0;
-    width: 1rem;
-    height: 1rem;
+    width: 1.125rem;
+    height: 1.125rem;
     fill: ${({ theme }) => theme.bgText};
   }
 `;
@@ -109,8 +109,8 @@ const Category = styled(Link)`
   svg {
     flex-shrink: 0;
     margin: 0 0.5rem 0 0;
-    width: 1rem;
-    height: 1rem;
+    width: 1.125rem;
+    height: 1.125rem;
     fill: ${({ theme }) => theme.bgText};
   }
 
@@ -135,8 +135,8 @@ const TagContainer = styled.nav`
   svg {
     flex-shrink: 0;
     margin: 0.25rem 0.5rem 0.5rem 0;
-    width: 1rem;
-    height: 1rem;
+    width: 1.125rem;
+    height: 1.125rem;
     fill: ${({ theme }) => theme.bgText};
   }
 `;

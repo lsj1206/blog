@@ -1,35 +1,35 @@
 // Assets list
 
 // Theme
-import LightIcon from "./icons/sun.svg";
-import DarkIcon from "./icons/moon.svg";
+import LightIcon from "./icons/mode-light.svg";
+import DarkIcon from "./icons/mode-dark.svg";
 
 // Common UI
-import HambergerIcon from "./icons/bars.svg";
-import SearchIcon from "./icons/magnifying-glass.svg";
-import CancelIcon from "./icons/xmark.svg";
-import SortIcon from "./icons/filter.svg";
-import TableIcon from "./icons/table-list.svg";
+import SearchIcon from "./icons/search.svg";
+import CancelIcon from "./icons/close-small.svg";
+import SortIcon from "./icons/sort.svg";
+import TocOpenIcon from "./icons/toc-open.svg";
+import TocCloseIcon from "./icons/toc-close.svg";
 
 // Floating Box
-import PageUpIcon from "./icons/caret-up.svg";
-import PageDownIcon from "./icons/caret-down.svg";
+import PageUpIcon from "./icons/navi-top.svg";
+import PageDownIcon from "./icons/navi-bottom.svg";
 
 // Post Data
-import CategoryListIcon from "./icons/folder-tree.svg";
-import CategoryIcon from "./icons/folder-open.svg";
-import TagsIcon from "./icons/tags.svg";
+import CategoryListIcon from "./icons/category-list.svg";
+import CategoryIcon from "./icons/category.svg";
+import TagsIcon from "./icons/tag.svg";
 import DateIcon from "./icons/calendar.svg";
-import LastDateIcon from "./icons/calendar-check.svg";
+import LastDateIcon from "./icons/calendar-last.svg";
 
 // Pagenation
-import PrevIcon from "./icons/angle-left.svg";
-import PrevShiftIcon from "./icons/angles-left.svg";
-import NextIcon from "./icons/angle-right.svg";
-import NextShiftIcon from "./icons/angles-right.svg";
+import PrevIcon from "./icons/pagination-left.svg";
+import PrevShiftIcon from "./icons/pagination-left-double.svg";
+import NextIcon from "./icons/pagination-right.svg";
+import NextShiftIcon from "./icons/pagination-right-double.svg";
 
 export { LightIcon, DarkIcon };
-export { HambergerIcon, SearchIcon, CancelIcon, SortIcon, TableIcon };
+export { SearchIcon, CancelIcon, SortIcon, TocOpenIcon, TocCloseIcon };
 export { PageUpIcon, PageDownIcon };
 export { CategoryListIcon, CategoryIcon, TagsIcon, DateIcon, LastDateIcon };
 export { PrevIcon, PrevShiftIcon, NextIcon, NextShiftIcon };

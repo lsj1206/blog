@@ -5,11 +5,11 @@ import { ThemeContext } from "../../context/ThemeProvider";
 import { styled } from "../../styles/Theme";
 import userData from "../../../user-data";
 // Assets
-import { LightIcon, DarkIcon, SearchIcon } from "../../assets/assets";
+import { LightIcon, DarkIcon, CategoryListIcon, SearchIcon } from "../../assets/assets";
 // Components
 import IconButton from "../buttons/IconButton";
 
-const Header = ({ className }) => {
+const Header = ({ className, sideOpen, toggleSideOpen }) => {
   const { theme, onChangeTheme } = useContext(ThemeContext);
 
   return (
@@ -22,6 +22,14 @@ const Header = ({ className }) => {
       </TitleContainer>
       <ButtonContainer aria-label="Site tools">
         <IconButton size={[32, 32]} icon={SearchIcon} to="/search" ariaLabel="Search posts" />
+        <IconButton
+          size={[32, 32]}
+          icon={CategoryListIcon}
+          onClick={toggleSideOpen}
+          ariaLabel={sideOpen ? "Close category menu" : "Open category menu"}
+          aria-expanded={sideOpen}
+          aria-controls="category-sidebar"
+        />
         <IconButton
           size={[35, 35]}
           icon={theme === "light" ? DarkIcon : LightIcon}

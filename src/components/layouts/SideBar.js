@@ -1,5 +1,5 @@
 // Main Sidebar
-import React from "react";
+import React, { useEffect } from "react";
 import { graphql, Link, useStaticQuery } from "gatsby";
 import { styled } from "../../styles/Theme";
 // Assets
@@ -21,23 +21,32 @@ const Sidebar = ({ className, open, setOpen }) => {
   `);
   const categoryList = data?.categoryList.group.sort((a, b) => b.count - a.count);
 
-  const closeOnBlur = (event) => {
-    if (!event.currentTarget.contains(event.relatedTarget)) {
-      setOpen(false);
+  useEffect(() => {
+    if (!open) {
+      return undefined;
     }
-  };
+
+    const closeOnEscape = (event) => {
+      if (event.key === "Escape") {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener("keydown", closeOnEscape);
+    return () => document.removeEventListener("keydown", closeOnEscape);
+  }, [open, setOpen]);
+
+  if (!open) {
+    return null;
+  }
 
   return (
     <SidebarContainer
+      id="category-sidebar"
       className={className}
-      $open={open}
       aria-label="Post categories"
-      onFocus={() => setOpen(true)}
-      onBlur={closeOnBlur}
-      onMouseEnter={() => setOpen(true)}
-      onMouseLeave={() => setOpen(false)}
     >
-      <ContentContainer $open={open} aria-label="Category navigation">
+      <ContentContainer aria-label="Category navigation">
         <Title>
           <CategoryListIcon aria-hidden="true" focusable="false" />
           {"Category List"}
@@ -45,14 +54,14 @@ const Sidebar = ({ className, open, setOpen }) => {
         <BorderLine />
         <CategoryList>
           <CategoryListItem key="ALL Posts">
-            <CategoryLink to="/">
+            <CategoryLink to="/" onClick={() => setOpen(false)}>
               <Text>{"ALL Posts"}</Text>
               <Count>{data?.categoryList.AllCount}</Count>
             </CategoryLink>
           </CategoryListItem>
           {categoryList?.map((category) => (
             <CategoryListItem key={category?.name}>
-              <CategoryLink to={categoryPath(category?.name)}>
+              <CategoryLink to={categoryPath(category?.name)} onClick={() => setOpen(false)}>
                 <Text>{category?.name}</Text>
                 <Count>{category?.count}</Count>
               </CategoryLink>
@@ -65,28 +74,22 @@ const Sidebar = ({ className, open, setOpen }) => {
 };
 
 const SidebarContainer = styled.aside`
-  z-index: ${(props) => (props.$open ? `600` : `400`)};
+  z-index: 600;
   position: fixed;
-  top: 100px;
-  right: 0;
-  width: ${(props) => (props.$open ? `250px` : `35px`)};
-  height: 70vh;
+  top: 45px;
+  right: 45px;
+  width: min(250px, calc(100vw - 58px));
+  max-height: min(70vh, calc(100vh - 55px));
   background-color: ${({ theme }) => theme.bgLayout};
-  border-top-left-radius: 0.75rem;
-  border-bottom-left-radius: 0.75rem;
-  overflow: hidden;
-  transition: width 0.3s ease;
-
-  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
-    display: ${(props) => (props.$open ? `flex` : `none`)};
-  }
+  border-radius: 0.75rem;
+  box-shadow: 1px 3px 5px rgba(0, 0, 0, 0.25);
+  overflow-x: hidden;
+  overflow-y: auto;
 `;
 
 const ContentContainer = styled.nav`
   padding: 1.5rem;
   width: 100%;
-  height: 100%;
-  visibility: ${(props) => (props.$open ? `visible` : `hidden`)};
 `;
 
 const Title = styled.h3`
@@ -99,8 +102,8 @@ const Title = styled.h3`
   svg {
     flex-shrink: 0;
     margin: 0 0.25rem 0 0;
-    width: 1.25rem;
-    height: 1.25rem;
+    width: 1.5rem;
+    height: 1.5rem;
     fill: ${({ theme }) => theme.btnText};
   }
 `;

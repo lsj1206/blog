@@ -41,7 +41,7 @@ const iconButtonStyle = css`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 5px;
+  padding: 3px;
   width: ${({ $width }) => $width}px;
   height: ${({ $height }) => $height}px;
   background-color: transparent;
