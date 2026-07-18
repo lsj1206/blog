@@ -1,32 +1,37 @@
 // Searching Page
-import React, { useState, useEffect } from "react";
-import { graphql, Link, navigate } from "gatsby";
+import React, { useEffect, useMemo, useState } from "react";
+import { graphql, navigate } from "gatsby";
 import { useLocation } from "@reach/router";
 import { styled } from "../styles/Theme";
 // Assets
-import { SearchIcon, CancelIcon, TagsIcon } from "../assets/assets";
+import { SearchIcon, CancelIcon } from "../assets/assets";
 // Hooks
 import usePostList from "../hooks/usePostList";
 // Components
 import IconButton from "../components/buttons/IconButton";
 import PostList from "../components/post/PostList";
 import VisuallyHidden from "../components/common/VisuallyHidden";
-import SEO from "../components/seo/SEO";
+import Seo from "../components/seo/SEO";
+import SearchTagList from "../components/search/SearchTagList";
 
 const SearchingPage = ({ data }) => {
   const [query, setQuery] = useState("");
+  const [activeTag, setActiveTag] = useState(null);
   const location = useLocation();
 
   const posts = usePostList(data);
 
   // 중복 태그 계산
-  const tagCounts = posts.reduce((acc, post) => {
-    post.tag?.forEach((tag) => {
-      acc[tag] = (acc[tag] || 0) + 1;
-    });
-    return acc;
-  }, {});
-  const sortedTags = Object.entries(tagCounts).sort(([, a], [, b]) => b - a);
+  const sortedTags = useMemo(() => {
+    const tagCounts = posts.reduce((acc, post) => {
+      post.tag?.forEach((tag) => {
+        acc[tag] = (acc[tag] || 0) + 1;
+      });
+      return acc;
+    }, {});
+
+    return Object.entries(tagCounts).sort(([, a], [, b]) => b - a);
+  }, [posts]);
 
   const searchPosts = posts.filter((post) => {
     const searchText = query.toLowerCase();
@@ -43,9 +48,12 @@ const SearchingPage = ({ data }) => {
   };
 
   useEffect(() => {
-    const tag = new URLSearchParams(location.search).get("tag");
-    setQuery(tag || "");
+    setActiveTag(new URLSearchParams(location.search).get("tag"));
   }, [location.search]);
+
+  useEffect(() => {
+    setQuery(activeTag || "");
+  }, [activeTag]);
 
   return (
     <PageWrapper>
@@ -67,15 +75,7 @@ const SearchingPage = ({ data }) => {
           ariaLabel={query ? "Clear search" : "Search posts"}
         />
       </SearchContainer>
-      <TagContainer>
-        <TagsIcon aria-hidden="true" focusable="false" />
-        {sortedTags?.map(([tag, count]) => (
-          <TagItem key={tag} to={`/search?tag=${encodeURIComponent(tag)}`}>
-            {tag}
-            <TagCount>({count})</TagCount>
-          </TagItem>
-        ))}
-      </TagContainer>
+      <SearchTagList tags={sortedTags} activeTag={activeTag} />
       <PostListContainer>
         <PostList postlist={searchPosts} />
       </PostListContainer>
@@ -164,70 +164,12 @@ const SearchButton = styled(IconButton)`
   right: 12px;
 `;
 
-const TagContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  margin: 0 0 10px 0;
-  width: 100%;
-
-  svg {
-    flex-shrink: 0;
-    margin: 0.65rem 0.25rem 0 0;
-    width: 1.5rem;
-    height: 1.5rem;
-    fill: ${({ theme }) => theme.bgText};
-  }
-
-  @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
-    width: 95%;
-  }
-`;
-
-const TagItem = styled(Link)`
-  display: flex;
-  align-items: center;
-  margin: 0.5rem 0.5rem 0 0;
-  padding: 0 0.5rem;
-  min-height: 1.5rem;
-  background-color: ${({ theme }) => theme.btnActiveText};
-  color: ${({ theme }) => theme.btnActive};
-  font-size: 0.9rem;
-  font-weight: bolder;
-  text-decoration: none;
-  border-radius: 0.25rem;
-  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
-  cursor: pointer;
-
-  &:visited {
-    color: ${({ theme }) => theme.btnActive};
-  }
-
-  &:hover,
-  &:focus-visible {
-    color: ${({ theme }) => theme.highlightText};
-    transform: scale(1.025);
-    span {
-      color: ${({ theme }) => theme.warningText};
-    }
-  }
-
-  &:active {
-    transform: scale(0.975);
-  }
-`;
-
-const TagCount = styled.span`
-  flex-shrink: 0;
-  margin-left: 0.25rem;
-`;
-
 const PostListContainer = styled.div`
   width: 100%;
 `;
 
 export const Head = () => (
-  <SEO title="Search" description="Search posts by title, category, or tag." pathname="/search/" robots="noindex, follow" />
+  <Seo title="Search" description="Search posts by title, category, or tag." pathname="/search/" robots="noindex, follow" />
 );
 
 export default SearchingPage;

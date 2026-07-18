@@ -10,6 +10,8 @@ import CancelIcon from "./icons/close-small.svg";
 import SortIcon from "./icons/sort.svg";
 import TocOpenIcon from "./icons/toc-open.svg";
 import TocCloseIcon from "./icons/toc-close.svg";
+import TagOpenIcon from "./icons/tag-open.svg";
+import TagCloseIcon from "./icons/tag-close.svg";
 
 // Floating Box
 import PageUpIcon from "./icons/navi-top.svg";
@@ -29,7 +31,7 @@ import NextIcon from "./icons/pagination-right.svg";
 import NextShiftIcon from "./icons/pagination-right-double.svg";
 
 export { LightIcon, DarkIcon };
-export { SearchIcon, CancelIcon, SortIcon, TocOpenIcon, TocCloseIcon };
+export { SearchIcon, CancelIcon, SortIcon, TocOpenIcon, TocCloseIcon, TagOpenIcon, TagCloseIcon };
 export { PageUpIcon, PageDownIcon };
 export { CategoryListIcon, CategoryIcon, TagsIcon, DateIcon, LastDateIcon };
 export { PrevIcon, PrevShiftIcon, NextIcon, NextShiftIcon };
