@@ -1,9 +1,7 @@
 // Main Sidebar
 import React, { useEffect } from "react";
 import { graphql, Link, useStaticQuery } from "gatsby";
-import { styled } from "../../styles/Theme";
-// Assets
-import { CategoryListIcon } from "../../assets/assets";
+import { layoutMetrics, styled } from "../../styles/Theme";
 
 const categoryPath = (category) => `/category/${encodeURIComponent(category)}`;
 
@@ -41,16 +39,9 @@ const Sidebar = ({ className, open, setOpen }) => {
   }
 
   return (
-    <SidebarContainer
-      id="category-sidebar"
-      className={className}
-      aria-label="Post categories"
-    >
+    <SidebarContainer id="category-sidebar" className={className} aria-label="Post categories">
       <ContentContainer aria-label="Category navigation">
-        <Title>
-          <CategoryListIcon aria-hidden="true" focusable="false" />
-          {"Category List"}
-        </Title>
+        <Title>Category</Title>
         <BorderLine />
         <CategoryList>
           <CategoryListItem key="ALL Posts">
@@ -88,24 +79,19 @@ const SidebarContainer = styled.aside`
 `;
 
 const ContentContainer = styled.nav`
-  padding: 1.5rem;
+  padding: 0.25rem ${layoutMetrics.floatingPanelPadding} ${layoutMetrics.floatingPanelPadding};
   width: 100%;
 `;
 
 const Title = styled.h3`
   display: flex;
   align-items: center;
+  min-height: 2rem;
   margin: 0;
+  padding-left: 8px;
   color: ${({ theme }) => theme.btnText};
+  line-height: 1.2;
   text-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);
-
-  svg {
-    flex-shrink: 0;
-    margin: 0 0.25rem 0 0;
-    width: 1.5rem;
-    height: 1.5rem;
-    fill: ${({ theme }) => theme.btnText};
-  }
 `;
 
 const BorderLine = styled.div`

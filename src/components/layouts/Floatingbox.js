@@ -37,6 +37,12 @@ const FloatingButton = styled(IconButton)`
   padding: 3px;
   background-color: ${({ theme }) => theme.bgLayout};
   border-radius: 50%;
+
+  svg {
+    flex-shrink: 0;
+    width: 160%;
+    height: 160%;
+  }
 `;
 
 export default FloatingBox;

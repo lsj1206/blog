@@ -13,7 +13,7 @@ const Header = ({ className, sideOpen, toggleSideOpen }) => {
   const { theme, onChangeTheme } = useContext(ThemeContext);
 
   return (
-    <HeaderContainer className={className}>
+    <HeaderContainer className={className} data-site-header="">
       <TitleContainer aria-label="Site identity">
         <HeaderTitle to="/">{userData.title}</HeaderTitle>
         <NameText href={userData.url} aria-label="Open portfolio">
@@ -30,11 +30,12 @@ const Header = ({ className, sideOpen, toggleSideOpen }) => {
           aria-expanded={sideOpen}
           aria-controls="category-sidebar"
         />
-        <IconButton
+        <ThemeButton
           size={[35, 35]}
           icon={theme === "light" ? DarkIcon : LightIcon}
           onClick={onChangeTheme}
           ariaLabel={`Switch to ${theme === "light" ? "dark" : "light"} theme`}
+          $isLightIcon={theme === "dark"}
         />
       </ButtonContainer>
     </HeaderContainer>
@@ -95,6 +96,13 @@ const ButtonContainer = styled.nav`
   display: flex;
   align-items: center;
   position: relative;
+`;
+
+const ThemeButton = styled(IconButton)`
+  svg {
+    width: ${({ $isLightIcon }) => ($isLightIcon ? `82%` : `100%`)};
+    height: ${({ $isLightIcon }) => ($isLightIcon ? `82%` : `100%`)};
+  }
 `;
 
 export default Header;

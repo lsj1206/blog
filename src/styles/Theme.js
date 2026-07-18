@@ -14,6 +14,11 @@ const breakpoints = {
   desktop: "1440px",
 };
 
+const layoutMetrics = {
+  floatingPanelGap: 10,
+  floatingPanelPadding: "0.75rem",
+};
+
 export const light = {
   brLine: "#585858",
   bgMain: "#FFFFFF",
@@ -52,4 +57,4 @@ export const dark = {
 
 // styled-components를 기본으로 내보냄
 const { default: styled, createGlobalStyle, css } = styledComponents;
-export { styled, createGlobalStyle, css };
+export { styled, createGlobalStyle, css, layoutMetrics };
