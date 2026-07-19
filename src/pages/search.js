@@ -16,8 +16,8 @@ import SearchTagList from "../components/search/SearchTagList";
 
 const SearchingPage = ({ data }) => {
   const [query, setQuery] = useState("");
-  const [activeTag, setActiveTag] = useState(null);
   const location = useLocation();
+  const activeTag = new URLSearchParams(location.search).get("tag");
 
   const posts = usePostList(data);
 
@@ -46,10 +46,6 @@ const SearchingPage = ({ data }) => {
     setQuery("");
     navigate(`/search`);
   };
-
-  useEffect(() => {
-    setActiveTag(new URLSearchParams(location.search).get("tag"));
-  }, [location.search]);
 
   useEffect(() => {
     setQuery(activeTag || "");

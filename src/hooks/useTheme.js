@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const getStoredTheme = () => {
   if (typeof window === "undefined") {
@@ -16,13 +16,13 @@ const getStoredTheme = () => {
 const useTheme = () => {
   const [theme, setTheme] = useState("light");
 
-  const onChangeTheme = useCallback(() => {
+  const onChangeTheme = () => {
     const updatedTheme = theme === "light" ? "dark" : "light";
     setTheme(updatedTheme);
     if (typeof window !== "undefined") {
       window.localStorage.setItem("theme", updatedTheme);
     }
-  }, [theme]);
+  };
 
   useEffect(() => {
     setTheme(getStoredTheme());

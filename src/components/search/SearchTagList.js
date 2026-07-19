@@ -8,13 +8,10 @@ import IconButton from "../buttons/IconButton";
 
 const SearchTagList = ({ tags, activeTag }) => {
   const [expanded, setExpanded] = useState(false);
-  const [layout, setLayout] = useState({
-    collapsedHeight: null,
-    hasOverflow: false,
-    visibleCount: tags.length,
-  });
+  const [visibleCount, setVisibleCount] = useState(tags.length);
   const listId = useId();
   const listRef = useRef(null);
+  const hasOverflow = visibleCount < tags.length;
 
   useEffect(() => {
     const list = listRef.current;
@@ -23,183 +20,127 @@ const SearchTagList = ({ tags, activeTag }) => {
       return undefined;
     }
 
-    let animationFrame = null;
-
     const measureRows = () => {
-      animationFrame = null;
-
       const items = Array.from(list.querySelectorAll("[data-search-tag]"));
 
       if (items.length === 0) {
-        setLayout({ collapsedHeight: null, hasOverflow: false, visibleCount: 0 });
+        setVisibleCount(0);
         return;
       }
 
-      const listIcon = list.querySelector("[data-tag-list-icon]");
-      const itemRects = items.map((item) => item.getBoundingClientRect());
       const rowTops = [];
-      const rowIndexes = itemRects.map((rect) => {
-        const existingRow = rowTops.findIndex((rowTop) => Math.abs(rowTop - rect.top) <= 1);
+      let nextVisibleCount = items.length;
 
-        if (existingRow !== -1) {
-          return existingRow;
+      for (let index = 0; index < items.length; index += 1) {
+        const itemTop = items[index].offsetTop;
+        const existingRow = rowTops.findIndex((rowTop) => Math.abs(rowTop - itemTop) <= 1);
+
+        if (existingRow === -1) {
+          rowTops.push(itemTop);
         }
 
-        rowTops.push(rect.top);
-        return rowTops.length - 1;
-      });
-      const visibleCount = rowIndexes.filter((rowIndex) => rowIndex < 2).length;
-      const hasOverflow = visibleCount < items.length;
-
-      const listTop = list.getBoundingClientRect().top;
-      const visibleElements = [listIcon, ...items.slice(0, visibleCount)].filter(Boolean);
-      const visibleBottom = Math.max(
-        ...visibleElements.map((element) => element.getBoundingClientRect().bottom - listTop),
-      );
-      const collapsedHeight = hasOverflow ? Math.ceil(visibleBottom) : null;
-
-      setLayout((current) => {
-        if (
-          current.collapsedHeight === collapsedHeight &&
-          current.hasOverflow === hasOverflow &&
-          current.visibleCount === visibleCount
-        ) {
-          return current;
+        if (rowTops.length > 2) {
+          nextVisibleCount = index;
+          break;
         }
+      }
 
-        return { collapsedHeight, hasOverflow, visibleCount };
-      });
+      setVisibleCount((current) => (current === nextVisibleCount ? current : nextVisibleCount));
 
-      if (!hasOverflow) {
+      if (nextVisibleCount === items.length) {
         setExpanded(false);
       }
     };
 
-    const scheduleMeasurement = () => {
-      if (animationFrame !== null) {
-        return;
-      }
+    measureRows();
 
-      animationFrame = window.requestAnimationFrame(measureRows);
-    };
+    if (typeof ResizeObserver !== "undefined") {
+      const resizeObserver = new ResizeObserver(measureRows);
+      resizeObserver.observe(list);
+      return () => resizeObserver.disconnect();
+    }
 
-    scheduleMeasurement();
-
-    const resizeObserver = typeof ResizeObserver === "undefined" ? null : new ResizeObserver(scheduleMeasurement);
-
-    resizeObserver?.observe(list);
-    window.addEventListener("resize", scheduleMeasurement);
-
-    return () => {
-      resizeObserver?.disconnect();
-      window.removeEventListener("resize", scheduleMeasurement);
-
-      if (animationFrame !== null) {
-        window.cancelAnimationFrame(animationFrame);
-      }
-    };
-  }, [layout.hasOverflow, tags]);
+    window.addEventListener("resize", measureRows);
+    return () => window.removeEventListener("resize", measureRows);
+  }, [tags]);
 
   useEffect(() => {
     if (!activeTag) {
       setExpanded(false);
-    }
-  }, [activeTag]);
-
-  useEffect(() => {
-    if (!activeTag) {
       return;
     }
 
     const activeIndex = tags.findIndex(([tag]) => tag === activeTag);
 
-    if (layout.hasOverflow && activeIndex >= layout.visibleCount) {
+    if (hasOverflow && activeIndex >= visibleCount) {
       setExpanded(true);
     }
-  }, [activeTag, layout.hasOverflow, layout.visibleCount, tags]);
+  }, [activeTag, hasOverflow, tags, visibleCount]);
 
   if (tags.length === 0) {
     return null;
   }
 
   return (
-    <TagSection>
-      <TagViewport
-        ref={listRef}
-        id={listId}
-        aria-label="Search by tag"
-        $collapsedHeight={layout.collapsedHeight}
-        $expanded={expanded}
-      >
-        <TagsIcon data-tag-list-icon="" aria-hidden="true" focusable="false" />
-        {tags.map(([tag, count], index) => {
-          const active = tag === activeTag;
-          const hidden = layout.hasOverflow && !expanded && index >= layout.visibleCount;
+    <TagViewport ref={listRef} id={listId} aria-label="Search by tag" $expanded={expanded}>
+      <TagsIcon aria-hidden="true" focusable="false" />
+      {tags.map(([tag, count], index) => {
+        const active = tag === activeTag;
+        const hidden = hasOverflow && !expanded && index >= visibleCount;
 
-          return (
-            <TagItem
-              key={tag}
-              data-search-tag=""
-              to={`/search?tag=${encodeURIComponent(tag)}`}
-              getProps={() => (active ? { "aria-current": "page" } : {})}
-              aria-hidden={hidden ? "true" : undefined}
-              tabIndex={hidden ? -1 : undefined}
-              $active={active}
-              $hidden={hidden}
-            >
-              {tag}
-              <TagCount>({count})</TagCount>
-            </TagItem>
-          );
-        })}
-        {layout.hasOverflow && (
-          <TagToggleButton
-            data-tag-toggle=""
-            size={[30, 30]}
-            icon={expanded ? TagCloseIcon : TagOpenIcon}
-            aria-expanded={expanded}
-            aria-controls={listId}
-            ariaLabel={expanded ? "Collapse tags" : `Show all tags (${tags.length})`}
-            onClick={() => setExpanded((current) => !current)}
-          />
-        )}
-      </TagViewport>
-    </TagSection>
+        return (
+          <TagItem
+            key={tag}
+            data-search-tag=""
+            to={`/search?tag=${encodeURIComponent(tag)}`}
+            aria-current={active ? "page" : undefined}
+            aria-hidden={hidden ? "true" : undefined}
+            tabIndex={hidden ? -1 : undefined}
+            $active={active}
+            $hidden={hidden}
+          >
+            {tag}
+            <TagCount>({count})</TagCount>
+          </TagItem>
+        );
+      })}
+      {hasOverflow && (
+        <TagToggleButton
+          data-tag-toggle=""
+          size={[30, 30]}
+          icon={expanded ? TagCloseIcon : TagOpenIcon}
+          aria-expanded={expanded}
+          aria-controls={listId}
+          ariaLabel={expanded ? "Collapse tags" : `Show all tags (${tags.length})`}
+          onClick={() => setExpanded((current) => !current)}
+        />
+      )}
+    </TagViewport>
   );
 };
-
-const TagSection = styled.div`
-  margin: 0 0 10px;
-  width: 100%;
-
-  @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
-    width: 95%;
-  }
-`;
 
 const TagViewport = styled.nav`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   box-sizing: border-box;
+  margin: 0 0 10px;
   position: relative;
   padding-right: 30px;
   width: 100%;
-  max-height: ${({ $collapsedHeight, $expanded }) => {
-    if ($expanded) {
-      return "none";
-    }
-
-    return $collapsedHeight ? `${$collapsedHeight}px` : "4.25rem";
-  }};
+  max-height: ${({ $expanded }) => ($expanded ? "none" : "4.1875rem")};
   overflow: hidden;
 
-  > [data-tag-list-icon] {
+  > svg {
     flex-shrink: 0;
     margin: 0.65rem 0.25rem 0 0;
     width: 1.5rem;
     height: 1.5rem;
     fill: ${({ theme }) => theme.bgText};
+  }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
+    width: 95%;
   }
 `;
 

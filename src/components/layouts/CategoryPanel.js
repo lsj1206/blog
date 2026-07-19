@@ -1,11 +1,11 @@
-// Main Sidebar
+// Category Panel
 import React, { useEffect } from "react";
 import { graphql, Link, useStaticQuery } from "gatsby";
 import { layoutMetrics, styled } from "../../styles/Theme";
 
 const categoryPath = (category) => `/category/${encodeURIComponent(category)}`;
 
-const Sidebar = ({ className, open, setOpen }) => {
+const CategoryPanel = ({ className, open, setOpen }) => {
   const data = useStaticQuery(graphql`
     query {
       categoryList: allMarkdownRemark {
@@ -17,7 +17,7 @@ const Sidebar = ({ className, open, setOpen }) => {
       }
     }
   `);
-  const categoryList = data?.categoryList.group.sort((a, b) => b.count - a.count);
+  const categories = [...data.categoryList.group].sort((a, b) => b.count - a.count);
 
   useEffect(() => {
     if (!open) {
@@ -39,32 +39,32 @@ const Sidebar = ({ className, open, setOpen }) => {
   }
 
   return (
-    <SidebarContainer id="category-sidebar" className={className} aria-label="Post categories">
+    <PanelContainer id="category-panel" className={className} aria-label="Post categories">
       <ContentContainer aria-label="Category navigation">
         <Title>Category</Title>
         <BorderLine />
         <CategoryList>
-          <CategoryListItem key="ALL Posts">
+          <CategoryListItem>
             <CategoryLink to="/" onClick={() => setOpen(false)}>
-              <Text>{"ALL Posts"}</Text>
-              <Count>{data?.categoryList.AllCount}</Count>
+              <Text>ALL Posts</Text>
+              <Count>{data.categoryList.AllCount}</Count>
             </CategoryLink>
           </CategoryListItem>
-          {categoryList?.map((category) => (
-            <CategoryListItem key={category?.name}>
-              <CategoryLink to={categoryPath(category?.name)} onClick={() => setOpen(false)}>
-                <Text>{category?.name}</Text>
-                <Count>{category?.count}</Count>
+          {categories.map((category) => (
+            <CategoryListItem key={category.name}>
+              <CategoryLink to={categoryPath(category.name)} onClick={() => setOpen(false)}>
+                <Text>{category.name}</Text>
+                <Count>{category.count}</Count>
               </CategoryLink>
             </CategoryListItem>
           ))}
         </CategoryList>
       </ContentContainer>
-    </SidebarContainer>
+    </PanelContainer>
   );
 };
 
-const SidebarContainer = styled.aside`
+const PanelContainer = styled.aside`
   z-index: 600;
   position: fixed;
   top: 45px;
@@ -159,4 +159,4 @@ const Count = styled.span`
   border-radius: 50%;
 `;
 
-export default Sidebar;
+export default CategoryPanel;

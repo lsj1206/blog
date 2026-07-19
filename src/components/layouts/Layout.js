@@ -4,23 +4,23 @@ import { styled } from "../../styles/Theme";
 import GlobalStyle from "../../styles/GlobalStyle";
 // Layout Components
 import Header from "./Header";
-import Sidebar from "./SideBar";
+import CategoryPanel from "./CategoryPanel";
 import FloatingBox from "./Floatingbox";
 import Footer from "./Footer";
 
 const Layout = ({ children }) => {
-  const [sideOpen, setSideOpen] = useState(false);
+  const [categoryOpen, setCategoryOpen] = useState(false);
 
-  const toggleSideOpen = () => {
-    setSideOpen((prev) => !prev);
+  const toggleCategoryOpen = () => {
+    setCategoryOpen((prev) => !prev);
   };
 
   return (
     <>
       <GlobalStyle />
       <Background>
-        <Header sideOpen={sideOpen} toggleSideOpen={toggleSideOpen} />
-        <Sidebar open={sideOpen} setOpen={setSideOpen} />
+        <Header categoryOpen={categoryOpen} toggleCategoryOpen={toggleCategoryOpen} />
+        <CategoryPanel open={categoryOpen} setOpen={setCategoryOpen} />
         <FloatingBox />
         <Content>{children}</Content>
         <Footer />

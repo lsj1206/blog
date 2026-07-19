@@ -1,60 +1,35 @@
 import React from "react";
+import { withPrefix } from "gatsby";
 import userData from "../../../user-data";
-
-const pathPrefix = "/blog";
-
-const normalizeSiteUrl = (value = "") => value.replace(/\/+$/g, "");
-
-const normalizePathPrefix = (value) => {
-  if (!value || value === "/") {
-    return "";
-  }
-
-  return `/${value.replace(/^\/+|\/+$/g, "")}`;
-};
 
 export const siteMetadata = {
   title: userData.title,
   description: userData.blog_description,
   author: userData.name,
-  siteUrl: normalizeSiteUrl(userData.url),
-  pathPrefix,
+  siteUrl: userData.url.replace(/\/+$/g, ""),
   defaultImage: "/image/homepage.jpg",
 };
 
-export const withPathPrefix = (pathname = "/") => {
-  if (!pathname) {
-    return siteMetadata.pathPrefix || "/";
-  }
-
-  if (/^https?:\/\//i.test(pathname)) {
-    return pathname;
-  }
-
-  const normalizedPrefix = normalizePathPrefix(siteMetadata.pathPrefix);
+const addPathPrefix = (pathname) => {
   const normalizedPath = pathname.startsWith("/") ? pathname : `/${pathname}`;
+  const pathPrefix = withPrefix("/").replace(/\/$/, "");
 
-  if (!normalizedPrefix) {
+  if (
+    pathPrefix &&
+    (normalizedPath === pathPrefix || normalizedPath.startsWith(`${pathPrefix}/`))
+  ) {
     return normalizedPath;
   }
 
-  if (normalizedPath === normalizedPrefix || normalizedPath.startsWith(`${normalizedPrefix}/`)) {
-    return normalizedPath;
-  }
-
-  return normalizedPath === "/" ? `${normalizedPrefix}/` : `${normalizedPrefix}${normalizedPath}`;
+  return withPrefix(normalizedPath);
 };
 
 export const buildUrl = (pathname = "/") => {
-  if (!pathname) {
-    return `${siteMetadata.siteUrl}${withPathPrefix("/")}`;
-  }
-
   if (/^https?:\/\//i.test(pathname)) {
     return pathname;
   }
 
-  return `${siteMetadata.siteUrl}${withPathPrefix(pathname)}`;
+  return new URL(addPathPrefix(pathname || "/"), `${siteMetadata.siteUrl}/`).toString();
 };
 
 export const toAbsoluteUrl = (value) => {

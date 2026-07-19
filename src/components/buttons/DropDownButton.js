@@ -14,6 +14,10 @@ const DDIconButton = ({ className, onClick, size = [30, 30], list, icon, ariaLab
   };
 
   useEffect(() => {
+    if (!isOpen) {
+      return undefined;
+    }
+
     const handleClickOutside = (event) => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
         setIsOpen(false);
@@ -23,7 +27,7 @@ const DDIconButton = ({ className, onClick, size = [30, 30], list, icon, ariaLab
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [isOpen]);
 
   const closeOnEscape = (event) => {
     if (event.key === "Escape") {
@@ -38,17 +42,15 @@ const DDIconButton = ({ className, onClick, size = [30, 30], list, icon, ariaLab
         onClick={toggleMenu}
         icon={icon}
         ariaLabel={ariaLabel}
-        aria-haspopup="menu"
         aria-expanded={isOpen}
         aria-controls={isOpen ? menuId : undefined}
       />
       {isOpen && (
-        <DropdownList id={menuId} role="menu" $buttonHeight={size[1]}>
+        <DropdownList id={menuId} $buttonHeight={size[1]}>
           {list.map((item, index) => (
-            <DropdownListItem key={index} role="none">
+            <DropdownListItem key={index}>
               <DropdownItem
                 type="button"
-                role="menuitem"
                 onClick={() => {
                   onClick(item);
                   setIsOpen(false);

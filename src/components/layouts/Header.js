@@ -9,7 +9,7 @@ import { LightIcon, DarkIcon, CategoryListIcon, SearchIcon } from "../../assets/
 // Components
 import IconButton from "../buttons/IconButton";
 
-const Header = ({ className, sideOpen, toggleSideOpen }) => {
+const Header = ({ className, categoryOpen, toggleCategoryOpen }) => {
   const { theme, onChangeTheme } = useContext(ThemeContext);
 
   return (
@@ -25,10 +25,10 @@ const Header = ({ className, sideOpen, toggleSideOpen }) => {
         <IconButton
           size={[32, 32]}
           icon={CategoryListIcon}
-          onClick={toggleSideOpen}
-          ariaLabel={sideOpen ? "Close category menu" : "Open category menu"}
-          aria-expanded={sideOpen}
-          aria-controls="category-sidebar"
+          onClick={toggleCategoryOpen}
+          ariaLabel={categoryOpen ? "Close category menu" : "Open category menu"}
+          aria-expanded={categoryOpen}
+          aria-controls="category-panel"
         />
         <ThemeButton
           size={[35, 35]}

@@ -22,11 +22,11 @@ const TableOfContents = ({ className, toc }) => {
 
   useEffect(() => {
     let animationFrame = null;
+    const siteHeader = document.querySelector("[data-site-header]");
 
     const updatePosition = () => {
       animationFrame = null;
 
-      const siteHeader = document.querySelector("[data-site-header]");
       const headerBottom = siteHeader?.getBoundingClientRect().bottom ?? 0;
       const nextTop = Math.max(layoutMetrics.floatingPanelGap, headerBottom + layoutMetrics.floatingPanelGap);
 
@@ -78,13 +78,15 @@ const TableOfContents = ({ className, toc }) => {
 };
 
 const TocWrapper = styled.nav`
+  --toc-max-height: min(75vh, calc(100vh - var(--toc-top, 50px) - 12px));
+
   z-index: 500;
   padding: 0.25rem;
   position: fixed;
   top: var(--toc-top, 50px);
   right: 12px;
   width: ${(props) => (props.$open ? `min(300px, calc(100vw - 24px))` : `auto`)};
-  max-height: min(75vh, calc(100vh - var(--toc-top, 50px) - 12px));
+  max-height: var(--toc-max-height);
   opacity: 0.95;
   background-color: ${({ theme }) => theme.bgLayout};
   border-radius: 0.75rem;
@@ -93,10 +95,7 @@ const TocWrapper = styled.nav`
 `;
 
 const Header = styled.div`
-  z-index: 501;
   display: flex;
-  position: sticky;
-  top: 0;
   align-items: center;
   justify-content: flex-end;
   flex-direction: row;
@@ -125,7 +124,7 @@ const Title = styled.h3`
 const TocContainer = styled.div`
   display: ${(props) => (props.$open ? `block` : `none`)};
   padding: ${layoutMetrics.floatingPanelPadding};
-  max-height: calc(min(75vh, calc(100vh - var(--toc-top, 50px) - 12px)) - 2.5rem);
+  max-height: calc(var(--toc-max-height) - 2.5rem);
   color: ${({ theme }) => theme.btnText};
   text-shadow: 1px 3px 5px rgba(0, 0, 0, 0.25);
   overflow-x: hidden;
@@ -133,9 +132,6 @@ const TocContainer = styled.div`
 
   &::-webkit-scrollbar {
     width: 0px;
-  }
-  &::-webkit-scrollbar-track {
-    margin-block: 0.75rem;
   }
 
   a {
