@@ -6,11 +6,6 @@ import { TagsIcon, TagOpenIcon, TagCloseIcon } from "../../assets/assets";
 // Components
 import IconButton from "../buttons/IconButton";
 
-const ROW_TOLERANCE = 1;
-const TAG_TOGGLE_SIZE = 30;
-const TAG_TOGGLE_GAP = 8;
-const TAG_TOGGLE_RIGHT_INSET = 56;
-
 const SearchTagList = ({ tags, activeTag }) => {
   const [expanded, setExpanded] = useState(false);
   const [layout, setLayout] = useState({
@@ -40,14 +35,11 @@ const SearchTagList = ({ tags, activeTag }) => {
         return;
       }
 
-      const listRect = list.getBoundingClientRect();
       const listIcon = list.querySelector("[data-tag-list-icon]");
       const itemRects = items.map((item) => item.getBoundingClientRect());
       const rowTops = [];
       const rowIndexes = itemRects.map((rect) => {
-        const existingRow = rowTops.findIndex(
-          (rowTop) => Math.abs(rowTop - rect.top) <= ROW_TOLERANCE
-        );
+        const existingRow = rowTops.findIndex((rowTop) => Math.abs(rowTop - rect.top) <= 1);
 
         if (existingRow !== -1) {
           return existingRow;
@@ -56,32 +48,13 @@ const SearchTagList = ({ tags, activeTag }) => {
         rowTops.push(rect.top);
         return rowTops.length - 1;
       });
-      const naturalVisibleCount = rowIndexes.filter((rowIndex) => rowIndex < 2).length;
-      const naturalHasOverflow = naturalVisibleCount < items.length;
-      const toggleLeft =
-        listRect.right - TAG_TOGGLE_RIGHT_INSET - TAG_TOGGLE_SIZE - TAG_TOGGLE_GAP;
-      let visibleCount = items.length;
-
-      if (naturalHasOverflow) {
-        visibleCount = 0;
-
-        for (let index = 0; index < items.length; index += 1) {
-          const rowIndex = rowIndexes[index];
-
-          if (rowIndex >= 2 || (rowIndex === 1 && itemRects[index].right > toggleLeft)) {
-            break;
-          }
-
-          visibleCount += 1;
-        }
-      }
-
+      const visibleCount = rowIndexes.filter((rowIndex) => rowIndex < 2).length;
       const hasOverflow = visibleCount < items.length;
 
       const listTop = list.getBoundingClientRect().top;
       const visibleElements = [listIcon, ...items.slice(0, visibleCount)].filter(Boolean);
       const visibleBottom = Math.max(
-        ...visibleElements.map((element) => element.getBoundingClientRect().bottom - listTop)
+        ...visibleElements.map((element) => element.getBoundingClientRect().bottom - listTop),
       );
       const collapsedHeight = hasOverflow ? Math.ceil(visibleBottom) : null;
 
@@ -112,8 +85,7 @@ const SearchTagList = ({ tags, activeTag }) => {
 
     scheduleMeasurement();
 
-    const resizeObserver =
-      typeof ResizeObserver === "undefined" ? null : new ResizeObserver(scheduleMeasurement);
+    const resizeObserver = typeof ResizeObserver === "undefined" ? null : new ResizeObserver(scheduleMeasurement);
 
     resizeObserver?.observe(list);
     window.addEventListener("resize", scheduleMeasurement);
@@ -180,11 +152,10 @@ const SearchTagList = ({ tags, activeTag }) => {
             </TagItem>
           );
         })}
-        {expanded && layout.hasOverflow && <TagToggleSpacer aria-hidden="true" />}
         {layout.hasOverflow && (
           <TagToggleButton
             data-tag-toggle=""
-            size={[TAG_TOGGLE_SIZE, TAG_TOGGLE_SIZE]}
+            size={[30, 30]}
             icon={expanded ? TagCloseIcon : TagOpenIcon}
             aria-expanded={expanded}
             aria-controls={listId}
@@ -212,6 +183,7 @@ const TagViewport = styled.nav`
   flex-wrap: wrap;
   box-sizing: border-box;
   position: relative;
+  padding-right: 30px;
   width: 100%;
   max-height: ${({ $collapsedHeight, $expanded }) => {
     if ($expanded) {
@@ -280,19 +252,11 @@ const TagCount = styled.span`
   margin-left: 0.25rem;
 `;
 
-const TagToggleSpacer = styled.span`
-  flex: 0 0 ${TAG_TOGGLE_RIGHT_INSET + TAG_TOGGLE_SIZE + TAG_TOGGLE_GAP}px;
-  margin-left: auto;
-  height: ${TAG_TOGGLE_SIZE}px;
-  pointer-events: none;
-`;
-
 const TagToggleButton = styled(IconButton)`
   position: absolute;
-  right: ${TAG_TOGGLE_RIGHT_INSET}px;
-  bottom: 0;
+  right: 12px;
+  bottom: -4px;
   margin: 0;
-  padding: 3px;
 
   &:focus-visible {
     outline: 2px solid ${({ theme }) => theme.highlightText};
