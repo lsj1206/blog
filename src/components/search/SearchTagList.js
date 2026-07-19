@@ -147,35 +147,33 @@ const TagViewport = styled.nav`
 const TagItem = styled(Link)`
   display: flex;
   align-items: center;
+  align-self: flex-start;
   flex-shrink: 0;
   visibility: ${({ $hidden }) => ($hidden ? "hidden" : "visible")};
   margin: 0.5rem 0.5rem 0 0;
-  padding: 0 0.5rem;
+  padding: 0.125rem 0.5rem;
   min-height: 1.5rem;
   max-width: 100%;
-  background-color: ${({ $active, theme }) => ($active ? theme.btnActive : theme.btnActiveText)};
-  color: ${({ $active, theme }) => ($active ? theme.btnActiveText : theme.btnActive)};
-  font-size: 0.9rem;
-  font-weight: bolder;
+  background-color: ${({ $active, theme }) => ($active ? theme.btnActive : theme.md.surface)};
+  color: ${({ $active, theme }) => ($active ? theme.btnActiveText : theme.md.mutedText)};
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.25;
   text-decoration: none;
   white-space: nowrap;
+  border: 1px solid ${({ $active, theme }) => ($active ? theme.btnActive : theme.md.border)};
   border-radius: 0.25rem;
-  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
   pointer-events: ${({ $hidden }) => ($hidden ? "none" : "auto")};
   cursor: pointer;
 
   &:visited {
-    color: ${({ $active, theme }) => ($active ? theme.btnActiveText : theme.btnActive)};
+    color: ${({ $active, theme }) => ($active ? theme.btnActiveText : theme.md.mutedText)};
   }
 
   &:hover,
   &:focus-visible {
     color: ${({ theme }) => theme.highlightText};
-    transform: scale(1.025);
-
-    span {
-      color: ${({ theme }) => theme.warningText};
-    }
+    border-color: ${({ theme }) => theme.highlightText};
   }
 
   &:focus-visible {
@@ -184,7 +182,7 @@ const TagItem = styled(Link)`
   }
 
   &:active {
-    transform: scale(0.975);
+    opacity: 0.8;
   }
 `;
 

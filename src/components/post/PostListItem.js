@@ -154,14 +154,15 @@ const TagItem = styled.span`
   display: flex;
   align-items: center;
   margin: 0 0.5rem 0.5rem 0;
-  padding: 0 0.5rem;
-  height: 1.5rem;
-  background-color: ${({ theme }) => theme.btnActiveText};
-  color: ${({ theme }) => theme.btnActive};
-  font-size: 0.9rem;
-  font-weight: bolder;
+  padding: 0.125rem 0.5rem;
+  min-height: 1.5rem;
+  background-color: ${({ theme }) => theme.md.surface};
+  color: ${({ theme }) => theme.md.mutedText};
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.25;
+  border: 1px solid ${({ theme }) => theme.md.border};
   border-radius: 0.25rem;
-  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
 `;
 
 export default PostListItem;
