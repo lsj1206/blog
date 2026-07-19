@@ -50,22 +50,29 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+  color: ${({ theme }) => theme.md.text};
 `;
 
 const BorderLine = styled.div`
-  margin-bottom: 10px;
+  margin-bottom: 0.75rem;
   height: 1px;
-  background-color: ${({ theme }) => theme.brLine};
+  background-color: ${({ theme }) => theme.md.border};
 `;
 
 const Title = styled.h1`
-  margin: 0;
+  margin: 0 0 0.5rem;
+  color: ${({ theme }) => theme.md.text};
+  font-size: clamp(2rem, 3.2vw, 2.5rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
 `;
 
 const InfoContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-bottom: 10px;
+  gap: 0.25rem 0.5rem;
+  margin-bottom: 0.5rem;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     flex-direction: column;
@@ -76,34 +83,35 @@ const InfoContainer = styled.div`
 const infoTextStyle = `
   display: flex;
   align-items: center;
-  margin-right: 0.5rem;
+  margin: 0;
   color: inherit;
-  font-weight: bolder;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.5;
   text-decoration: none;
-  text-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
 `;
 
 const InfoText = styled.p`
   ${infoTextStyle}
-  color: ${({ theme }) => theme.bgText};
+  color: ${({ theme }) => theme.md.mutedText};
 
   svg {
     flex-shrink: 0;
     margin: 0 0.5rem 0 0;
     width: 1.125rem;
     height: 1.125rem;
-    fill: ${({ theme }) => theme.bgText};
+    fill: currentColor;
   }
 `;
 
 const Category = styled(Link)`
   ${infoTextStyle}
   flex: 1;
-  color: ${({ theme }) => theme.bgText};
+  color: ${({ theme }) => theme.md.mutedText};
   cursor: pointer;
 
   &:visited {
-    color: ${({ theme }) => theme.bgText};
+    color: ${({ theme }) => theme.md.mutedText};
   }
 
   svg {
@@ -111,17 +119,12 @@ const Category = styled(Link)`
     margin: 0 0.5rem 0 0;
     width: 1.125rem;
     height: 1.125rem;
-    fill: ${({ theme }) => theme.bgText};
+    fill: currentColor;
   }
 
   &:hover,
   &:focus-visible {
     color: ${({ theme }) => theme.highlightText};
-    transform: scale(1.025);
-  }
-
-  &:active {
-    transform: scale(0.975);
   }
 `;
 
@@ -129,15 +132,17 @@ const TagContainer = styled.nav`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  margin-top: 0.25rem;
   width: 100%;
   min-height: 1.75rem;
+  color: ${({ theme }) => theme.md.mutedText};
 
   svg {
     flex-shrink: 0;
     margin: 0.25rem 0.5rem 0.5rem 0;
     width: 1.125rem;
     height: 1.125rem;
-    fill: ${({ theme }) => theme.bgText};
+    fill: currentColor;
   }
 `;
 
@@ -145,38 +150,40 @@ const TagItem = styled(Link)`
   display: flex;
   align-items: center;
   margin: 0 0.5rem 0.5rem 0;
-  padding: 0 0.5rem;
+  padding: 0.125rem 0.5rem;
   min-height: 1.5rem;
-  background-color: ${({ theme }) => theme.btnActiveText};
-  color: ${({ theme }) => theme.btnActive};
-  font-size: 0.9rem;
-  font-weight: bolder;
+  background-color: ${({ theme }) => theme.md.surface};
+  color: ${({ theme }) => theme.md.mutedText};
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.25;
   text-decoration: none;
+  border: 1px solid ${({ theme }) => theme.md.border};
   border-radius: 0.25rem;
-  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
   cursor: pointer;
 
   &:visited {
-    color: ${({ theme }) => theme.btnActive};
+    color: ${({ theme }) => theme.md.mutedText};
   }
 
   &:hover,
   &:focus-visible {
     color: ${({ theme }) => theme.highlightText};
-    transform: scale(1.025);
+    border-color: ${({ theme }) => theme.highlightText};
   }
 
   &:active {
-    transform: scale(0.975);
+    opacity: 0.8;
   }
 `;
 
 const ImgContainer = styled.div`
   flex-shrink: 0;
-  margin: 0.75rem 0 0.25rem 0;
+  margin: 1.25rem 0 0.5rem;
   width: 100%;
   height: 15rem;
-  border-radius: 0.75rem;
+  border: 1px solid ${({ theme }) => theme.md.imageBorder};
+  border-radius: 6px;
   overflow: hidden;
 `;
 

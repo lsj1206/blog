@@ -7,6 +7,7 @@ import { styled } from "../styles/Theme";
 import { giscusData } from "../../user-data";
 // Components
 import PostHeader from "../components/post/PostHeader";
+import PostContent from "../components/post/PostContent";
 import TableOfContents from "../components/post/TableofContents";
 import SEO, { buildUrl, siteMetadata, toAbsoluteUrl } from "../components/seo/SEO";
 
@@ -32,7 +33,7 @@ const PostTemplate = ({ data }) => {
     <PageWrapper>
       <PostContainer>
         <PostHeader postData={postData} />
-        <Content dangerouslySetInnerHTML={{ __html: post.html }} />
+        <PostContent html={post.html} />
         <BorderLine />
         <Comment className="giscus">
           <Giscus
@@ -59,20 +60,20 @@ const PostTemplate = ({ data }) => {
 const PageWrapper = styled.article`
   display: flex;
   flex-direction: row;
+  justify-content: center;
+  width: 100%;
+  min-width: 0;
 `;
 
 const PostContainer = styled.div`
   display: flex;
   flex-direction: column;
-  padding-top: 30px;
-  width: 768px;
+  padding-top: 2.5rem;
+  width: min(768px, calc(100% - 48px));
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
-    width: 66vw;
-  }
-
-  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
-    width: 75vw;
+  @media (max-width: ${({ theme }) => theme.breakpoints.narrow}) {
+    padding-top: 2rem;
+    width: calc(100% - 40px);
   }
 `;
 
@@ -80,16 +81,7 @@ const BorderLine = styled.div`
   margin: 5px 0 15px 0;
   width: 100%;
   height: 1px;
-  background-color: ${({ theme }) => theme.brLine};
-`;
-
-const Content = styled.div`
-  margin: 2rem 0;
-
-  img {
-    border: 1px solid ${({ theme }) => theme.bgMainSub};
-    border-radius: 0.3rem;
-  }
+  background-color: ${({ theme }) => theme.md.border};
 `;
 
 const Comment = styled.div``;

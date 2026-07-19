@@ -101,55 +101,6 @@ const GlobalStyle = createGlobalStyle`
     margin-bottom: 0.25em;
   }
 
-  /* 테이블 (table, th, tr, td) */
-  table {
-    margin-bottom: 1rem;
-    width: auto;
-    border-collapse: collapse;
-  }
-
-  th, td {
-    text-align: left;
-    padding: 0.5rem;
-    border: 1px solid ${({ theme }) => theme.md.tableBr};
-  }
-
-  th {
-    background-color: ${({ theme }) => theme.btn};
-  }
-
-  blockquote {
-    display: flex;
-    margin: 0.75rem 0 0.75rem 0;
-    padding: 0.9rem 1.1rem;
-    background-color: ${({ theme }) => theme.bgLayout};
-    color: ${({ theme }) => theme.md.blockquote};
-    border: 0;
-    border-radius: 10px;
-  }
-
-  /* 수평선 */
-  hr {
-    margin: 1rem 0;
-    border-top: 1px solid ${({ theme }) => theme.brLine};
-  }
-
-  /* 상세 내용 (details, summary) */
-  details {
-    margin-bottom: 1rem;
-  }
-
-  summary {
-    font-weight: bold;
-    cursor: pointer;
-  }
-
-  /* 하이라이트 텍스트 (mark) */
-  mark {
-    background-color: LightYellow;
-    color: black;
-  }
-
   :focus-visible {
     outline: 2px solid ${({ theme }) => theme.highlightText};
     outline-offset: 2px;

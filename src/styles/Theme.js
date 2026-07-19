@@ -1,9 +1,37 @@
 // Color Palette for Theme
 import * as styledComponents from "styled-components";
 
-const md = {
-  blockquote: "#707070",
-  tableBr: "#C0C0C0",
+const lightMarkdown = {
+  text: "#37352F",
+  mutedText: "#787774",
+  border: "#E9E9E7",
+  surface: "#F7F6F3",
+  callout: "#F7F6F3",
+  calloutBorder: "#D3D1CB",
+  tableHeader: "#F7F6F3",
+  inlineCodeBg: "rgba(135, 131, 120, 0.15)",
+  inlineCodeText: "#EB5757",
+  imageBorder: "#E9E9E7",
+  mark: "#FDECC8",
+  markText: "#37352F",
+  codeSurface: "#404859",
+  visitedLink: "#9370DB",
+};
+
+const darkMarkdown = {
+  text: "#EBEBEA",
+  mutedText: "#9B9A97",
+  border: "#454545",
+  surface: "#333333",
+  callout: "#323232",
+  calloutBorder: "#5A5A5A",
+  tableHeader: "#333333",
+  inlineCodeBg: "rgba(135, 131, 120, 0.3)",
+  inlineCodeText: "#FF7369",
+  imageBorder: "#454545",
+  mark: "#5C4B20",
+  markText: "#F4E8C1",
+  codeSurface: "#404859",
   visitedLink: "#9370DB",
 };
 
@@ -33,7 +61,7 @@ export const light = {
   btnActiveText: "#C0C0C0",
   highlightText: "#4682B4",
   warningText: "#8B0000",
-  md: { ...md },
+  md: { ...lightMarkdown },
   breakpoints: { ...breakpoints },
 };
 
@@ -51,7 +79,7 @@ export const dark = {
   btnActiveText: "#505050",
   highlightText: "#87CEEB",
   warningText: "#F08080",
-  md: { ...md },
+  md: { ...darkMarkdown },
   breakpoints: { ...breakpoints },
 };
 
