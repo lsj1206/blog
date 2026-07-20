@@ -1,5 +1,5 @@
 ---
-title: "PixConvert 개발 일지"
+title: "PixConvert 개발일지"
 coverImage: "./_assets/pixconvert-cover.jpg"
 category: "C-sharp"
 tag: ["C-sharp", "WPF", ".NET", "ModernWPF", "SkiaSharp", "NetVips", "Image Processing"]
