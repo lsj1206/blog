@@ -20,7 +20,7 @@ const GlobalStyle = createGlobalStyle`
     color: ${({ theme }) => theme.text};
     background: ${({ theme }) => theme.bgMain};
     font-family: 'D2Coding', sans-serif;
-    line-height: 1.5;
+    line-height: 1.2;
     }
 
   img, video {
@@ -38,33 +38,46 @@ const GlobalStyle = createGlobalStyle`
 
   /* Markdown Config */
   h1, h2, h3, h4, h5, h6 {
-    margin: 0.75rem 0 0.5rem 0;
-    font-weight: bolder;
+    color: ${({ theme }) => theme.md.text};
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: -0.02em;
+    word-break: keep-all;
+    overflow-wrap: anywhere;
   }
   h1 {
-    margin: 1.75rem 0 0.5rem 0;
+    margin: 2.25rem 0 0.5rem;
     font-size: 2rem;
   }
   h2 {
-    margin: 1.5rem 0 0.5rem 0;
+    margin: 1.75rem 0 0.5rem;
     font-size: 1.75rem;
   }
   h3 {
+    margin: 1.5rem 0 0.5rem;
     font-size: 1.5rem;
   }
   h4 {
+    margin: 1.25rem 0 0.5rem;
     font-size: 1.25rem;
   }
   h5 {
+    margin: 1.25rem 0 0.5rem;
     font-size: 1rem;
   }
   h6 {
+    margin: 1.25rem 0 0.5rem;
+    color: ${({ theme }) => theme.md.mutedText};
     font-size: 0.75rem;
   }
 
   p {
-    margin: 0 0 0.5rem 0;
+    margin: 0 0 0.5rem;
+    color: ${({ theme }) => theme.md.text};
     font-size: 1rem;
+    line-height: 1.65;
+    word-break: keep-all;
+    overflow-wrap: anywhere;
   }
 
   a {

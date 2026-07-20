@@ -104,12 +104,10 @@ const TextContainer = styled.div`
 const TitleText = styled.h4`
   margin: 0;
   width: 100%;
-  color: ${({ theme }) => theme.text};
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   word-break: break-all;
-  text-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3);
 `;
 
 const Text = styled.p`
